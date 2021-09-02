@@ -11,7 +11,7 @@ It copies scripts that have already been decompiled and fixed, then deletes thei
 
 ## Credits
 
-All game scripts outside of the addons folder belong to Consumer Softproducts
-BitmapFontCutter addon from https://github.com/nobuyukinyuu/BitmapFontCutter
-Screen Space Decals addon from https://github.com/Mr-Slurpy/Screen-Space-Decals
+All game scripts outside of the addons folder belong to Consumer Softproducts  
+BitmapFontCutter addon from https://github.com/nobuyukinyuu/BitmapFontCutter  
+Screen Space Decals addon from https://github.com/Mr-Slurpy/Screen-Space-Decals  
 Qodot addon from https://github.com/Shfty/qodot-plugin
