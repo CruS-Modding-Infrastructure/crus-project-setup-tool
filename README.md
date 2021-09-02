@@ -4,6 +4,11 @@ Tool consisting of a batch script and folder of every game script in Cruelty Squ
 
 It copies scripts that have already been decompiled and fixed, then deletes their .gdc and .gd.remap counterparts. In addition, a few small fixes in `Scripts/E_Grunt_Movement_New.gd` have been applied to help the intro cutscene play properly.
 
+## How to use
+
+1. Extract `_SETUP_PROJECT_` folder into project root directory
+2. Run `setup_scripts.bat`
+
 ## Credits
 
 All game scripts outside of the addons folder belong to Consumer Softproducts
