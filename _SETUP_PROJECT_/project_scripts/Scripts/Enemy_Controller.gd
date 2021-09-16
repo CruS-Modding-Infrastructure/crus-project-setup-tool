@@ -1,9 +1,5 @@
 extends Node
 
-
-
-
-
 var thread
 var enemies
 var player
@@ -14,7 +10,6 @@ var mutex
 func _ready():
 	mutex = Mutex.new()
 	thread = Thread.new()
-	
 	
 	enemies = get_tree().get_nodes_in_group("enemies")
 	player = Global.player
@@ -27,10 +22,13 @@ func AI():
 			mutex.lock()
 			if player == null:
 				return 
+			
 			if enemy.global_transform.origin.distance_to(player.global_transform.origin) > glob.draw_distance + 10:
 				return 
+			
 			if enemy.civ_killer:
 				enemy.player_spotted = true
+			
 			if Global.every_20:
 				enemy.player_distance = enemy.global_transform.origin.distance_to(player.global_transform.origin)
 				enemy.stealthed = glob.implants.torso_implant.stealth and enemy.player_distance > 20
@@ -46,7 +44,6 @@ func AI():
 				return 
 			elif enemy.player_distance > 50 and not Global.every_2:
 				delta *= 2
-			
 			
 			if Global.every_55:
 				if randi() % 2 == 1:
@@ -88,8 +85,6 @@ func AI():
 							collider.piercing_damage(200, normal, point, enemy.global_transform.origin)
 			enemy.velocity.y -= enemy.gravity * enemy.delta
 			if not enemy.dead and not enemy.tranq:
-				
-		
 				if enemy.player_spotted:
 					enemy.player_spotted()
 				enemy.track_player(delta)
@@ -107,6 +102,6 @@ func AI():
 					enemy.velocity.z *= 0.95
 			mutex.unlock()
 		yield (get_tree(), "physics_frame")
-		
+
 func _exit_tree():
 	thread.wait_to_finish()

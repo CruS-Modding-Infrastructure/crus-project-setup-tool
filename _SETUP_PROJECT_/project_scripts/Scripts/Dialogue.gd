@@ -1,9 +1,5 @@
 extends Node
 
-
-
-
-
 var DIALOGUE:Array = [
 	[
 	"Here to improve your aim?", 

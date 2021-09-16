@@ -146,7 +146,6 @@ func cancer():
 		set_move_speed()
 
 func _ready():
-
 	current_time = OS.get_system_time_msecs()
 	last_time = OS.get_system_time_msecs()
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), Global.music_volume)
@@ -262,7 +261,7 @@ func _ready():
 		Global.objective_complete = true
 		Global.objectives = 0
 	set_move_speed()
-	
+
 func set_psychosis(value):
 	psychocounter += 1
 
@@ -280,7 +279,6 @@ func thrust():
 		new_vomit.global_transform.origin = result.position
 		new_vomit.rotation.y = rand_range( - PI, PI)
 	
-		
 func grapple(pos3d:Position3D):
 	var point = pos3d.global_transform.origin
 	var distance = global_transform.origin.distance_to(point)
@@ -327,12 +325,8 @@ func set_move_speed():
 		run_acceleration = 10
 		
 	move_speed = clamp(move_speed, 2, 100)
+
 func _physics_process(delta):
-
-
-
-
-
 	if start_flag:
 		UI.time_now = OS.get_system_time_msecs()
 		current_time = OS.get_system_time_msecs()
@@ -341,12 +335,7 @@ func _physics_process(delta):
 	else :
 		current_time = OS.get_system_time_msecs()
 		last_time = OS.get_system_time_msecs()
-
-
-
-
-
-		
+	
 	if Global.implants.head_implant.climb:
 		if is_on_wall():
 			ladder = true
@@ -415,27 +404,6 @@ func _physics_process(delta):
 			UI.toxic = false
 			toxic_damage_count = 0
 			set_move_speed()
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-		
 	
 	amp -= delta * 0.5
 	if amp >= 0:
@@ -517,13 +485,6 @@ func _physics_process(delta):
 		$SFX / IED_alert.pitch_scale += 0.1
 		$SFX / IED1.pitch_scale = sin(time * rand_range(0, 2.5)) * rand_range(0.1, 0.3) + 1.1
 		$SFX / IED2.pitch_scale = sin(time * rand_range(0, 5)) * 0.3 + 1.1
-
-
-
-
-	
-		
-		
 	
 	x_mouse_sensitivity = GLOBAL.mouse_sensitivity
 	y_mouse_sensitivity = GLOBAL.mouse_sensitivity
@@ -532,17 +493,11 @@ func _physics_process(delta):
 		rotate_towards = clamp(rotate_towards, deg2rad( - 4), deg2rad(4))
 		rotate_towards *= 0.9
 	
-		
-			
-		
-			
-		
 	move_towards_z -= player_velocity.length() * cmd.forward_move * 0.01
 	move_towards_z = clamp(move_towards_z, deg2rad( - 1), deg2rad(1))
 	move_towards_z *= 0.9
 	
 	move_towards_y = clamp(0.025 + player_velocity.y * 0.01, 0.02, 0.025)
-	
 	
 	if not dead:
 		if not is_equal_approx(player_view.transform.origin.z, move_towards_z):
@@ -552,14 +507,6 @@ func _physics_process(delta):
 
 	shader_screen.material.set_shader_param("health_green", lerp(shader_screen.material.get_shader_param("health_green"), 0, 0.1))
 	
-	
-
-
-
-
-
-	
-	
 	move(delta)
 	
 	
@@ -568,8 +515,8 @@ func detox():
 	UI.toxic = false
 	toxic_damage_count = 0
 	set_move_speed()
-func _process(delta):
 	
+func _process(delta):
 	if Input.is_action_just_pressed("Tertiary_Weapon") and Global.implants.arm_implant.grav and cancer_count < 10:
 		max_gravity *= - 1
 		$Top_Checkr / RayCast.cast_to *= - 1
@@ -584,8 +531,8 @@ func _process(delta):
 			get_parent().cam_pos.rotation.z = deg2rad(180)
 			if crouch_flag:
 				rotation_helper.transform.origin.y = - 0.7
-		
 	queue_jump()
+
 func suicide():
 	if not died:
 		health = 0
@@ -833,7 +780,6 @@ func queue_jump():
 			wish_jump = false
 
 func air_move(delta):
-	
 	var wishdir
 	var wishvel = air_acceleration
 	var accel

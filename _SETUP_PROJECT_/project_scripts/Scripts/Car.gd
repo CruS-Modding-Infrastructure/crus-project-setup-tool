@@ -8,10 +8,7 @@ var time = 0
 export  var engine = 2000
 
 func _ready():
-
 	set_collision_layer_bit(8, 1)
-
-
 
 func _physics_process(delta):
 	if in_use:
@@ -32,9 +29,6 @@ func _physics_process(delta):
 		Global.player.weapon.left_arm_mesh.hide()
 		Global.player.transform.basis = transform.basis * $Car / Player_Pos.transform.basis
 		
-		
-		
-		
 		if Input.is_action_just_pressed("Use"):
 			Global.player.transform.basis = init_player_basis * $Car / Player_Pos.transform.basis
 			
@@ -51,8 +45,6 @@ func _physics_process(delta):
 			Global.player.weapon.left_arm_mesh.show()
 		if not Input.is_action_pressed("movement_left") and not Input.is_action_pressed("movement_right"):
 			steering = lerp(steering, 0, 0.5)
-		
-		
 
 func use():
 	sleeping = false
@@ -82,12 +74,6 @@ func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and in_use:
 		
 		$Car / Player_Pos.rotate_y(deg2rad(event.relative.x * Global.mouse_sensitivity * - 1))
-		
-		
-		
-		
-	
-
 
 func _on_VehicleBody_body_entered(body):
 	if body.has_method("damage") and body != Global.player:

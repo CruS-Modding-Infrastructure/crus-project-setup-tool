@@ -29,11 +29,6 @@ func _ready():
 	mesh_instance.transform = t
 	collision_shape.transform = t
 
-
-
-
-		
-
 func _physics_process(delta):
 	if not open and not stop:
 		if not audio_player.playing:
@@ -49,12 +44,6 @@ func _physics_process(delta):
 		audio_player.stop()
 		movement_counter = 0
 		stop = true
-
-
-
-
-
-
 
 func switch_use():
 	if stop and not open:

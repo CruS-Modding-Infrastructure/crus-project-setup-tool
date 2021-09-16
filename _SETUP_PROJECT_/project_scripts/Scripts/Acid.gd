@@ -1,5 +1,7 @@
 extends Area
+
 var particles
+
 func _ready():
 	particles = get_parent().get_node("Particles")
 	particles.emitting = true

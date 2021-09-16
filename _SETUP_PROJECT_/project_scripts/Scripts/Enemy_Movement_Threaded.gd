@@ -1,7 +1,5 @@
 extends KinematicBody
 
-
-
 var rotation_helper:Spatial
 var player_ray:RayCast
 var held = false
@@ -10,8 +8,8 @@ var velocity_ray:RayCast
 var in_sight:bool
 var in_view:bool = false
 var weapon:Spatial
-export  var no_patrol = false
-export  var ai_distance = 100
+export var no_patrol = false
+export var ai_distance = 100
 var rotate_towards:Vector3 = Vector3(0, 0, 0)
 var rand_rot:Vector3 = Vector3(0, 0, 0)
 var anim_player:AnimationPlayer
@@ -19,17 +17,17 @@ var footstep:AudioStreamPlayer3D
 var anim_counter = 0
 var alerted = false
 var movement_sound:AudioStreamPlayer3D
-export  var melee = false
-export  var rotate = true
-export  var crusher = false
-export  var wait_sound = false
-export  var path_finding_size_modifier:float = 0
+export var melee = false
+export var rotate = true
+export var crusher = false
+export var wait_sound = false
+export var path_finding_size_modifier:float = 0
 const DEATH_ANIMS:Array = ["Death1", "Death2"]
 var burst_counter = 0
 var burst_reloading = false
-export  var burst = false
-export  var patrol = false
-export  var burst_size = 15
+export var burst = false
+export var patrol = false
+export var burst_size = 15
 
 var alerted_counter = 0
 var tranq = false
@@ -49,15 +47,15 @@ var heading_y:Vector3
 var spot_time = 0.5
 var sight_potential = false
 var has_anim_attack
-export  var fix_helper_pos = true
-export  var engage_distance:float = 7
-export  var pathing_frequency:float = 100
-export  var reaction_time:float = 9
-export  var gravity:float = 22
-export  var friction:float = 6
+export var fix_helper_pos = true
+export var engage_distance:float = 7
+export var pathing_frequency:float = 100
+export var reaction_time:float = 9
+export var gravity:float = 22
+export var friction:float = 6
 var knocksound
-export  var move_speed:float = 4.5
-export  var jump_speed:float = 7
+export var move_speed:float = 4.5
+export var jump_speed:float = 7
 var rand_patroller = false
 var height_difference:bool = false
 var velocity:Vector3 = Vector3(0, 0, 0)
@@ -95,13 +93,17 @@ func _ready()->void :
 		
 	if move_speed != 0:
 		move_speed += rand_range( - 1, 1)
+	
 	alertness = floor(rand_range(50, 200))
+	
 	if randi() % 2 == 0 and not crusher and move_speed != 0 and not wait_sound and not no_patrol:
 		rand_patroller = true
 		pos1 = global_transform.origin
 		pos2 = pos1 + (Vector3.FORWARD * 5).rotated(Vector3.UP, deg2rad(rand_range(0, 360)))
+	
 	if wait_sound:
 		knocksound = get_node("Knocksound")
+	
 	movement_sound = get_node_or_null("Movement_Sound")
 	anim_player = get_parent().get_node("Nemesis/AnimationPlayer")
 	
@@ -115,9 +117,12 @@ func _ready()->void :
 	time = round(rand_range(1, 100))
 	if rotate:
 		look_at(global_transform.origin + Vector3(rand_range( - 1, 1), 0, rand_range( - 1, 1)), Vector3.UP)
+	
 	player = glob.player
+	
 	if player:
 		player_distance = global_transform.origin.distance_to(player.global_transform.origin)
+	
 	navigation = glob.nav
 	player_ray = $Player_Ray
 	player_ray.transform.origin.z = 0
@@ -157,47 +162,19 @@ func _ready()->void :
 	yield (get_tree(), "idle_frame")
 	nearby = soul.new_alert_sphere.get_overlapping_bodies()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 func _physics_process(delta)->void :
 	move()
 	return 
+	
 	if player == null:
 		return 
+	
 	if global_transform.origin.distance_to(player.global_transform.origin) > glob.draw_distance + 10:
 		return 
+	
 	if civ_killer:
 		player_spotted = true
+	
 	if Global.every_20:
 		player_distance = global_transform.origin.distance_to(player.global_transform.origin)
 		stealthed = glob.implants.torso_implant.stealth and player_distance > 20
@@ -284,10 +261,7 @@ func move()->void :
 			if collision.collider != null:
 				if collision.collider.has_method("damage") and Vector3(velocity.x, 0, velocity.y).length() > 2:
 					collision.collider.damage(100, collision.normal, collision.position, global_transform.origin)
-		
-		
-		
-		
+	
 	velocity = move_and_slide(velocity, Vector3.UP, 0.05, 4, 0.785398)
 
 func wait_for_player(delta)->void :
@@ -337,18 +311,8 @@ func wait_for_player(delta)->void :
 		if path.size() > 0:
 			find_path(delta)
 
-
 func anim()->void :
 	pass
-
-
-
-
-
-
-
-
-
 
 func set_animation(anim:String, speed:float)->void :
 	anim_player.play(anim)
@@ -413,7 +377,7 @@ func add_velocity(incvelocity:Vector3)->void :
 			player_spotted = true
 			look_at(player.global_transform.origin, Vector3.UP)
 			rotation.x = 0
-	
+
 func alert(pos:Vector3)->void :
 	if player_spotted or alerted:
 		return 
@@ -427,10 +391,6 @@ func alert(pos:Vector3)->void :
 	
 	alerted = true
 
-
-
-
-	
 	if not dead and not tranq:
 		$SFX / Pain1.play()
 
@@ -513,7 +473,7 @@ func find_path(delta)->void :
 
 func get_look_at()->Transform:
 	return transform.looking_at(Vector3(player_last_seen.x, player_last_seen.y, player_last_seen.z), Vector3.UP)
-	
+
 func get_leg_rotation()->Transform:
 	if player_last_seen != null:
 		var a = global_transform.looking_at(Vector3(player_last_seen.x, player_last_seen.y, player_last_seen.z) + Vector3(velocity.x, 0, velocity.z) * 0.7, Vector3.UP)
@@ -542,6 +502,7 @@ func set_dead()->void :
 			var anim = DEATH_ANIMS[randi() % DEATH_ANIMS.size()]
 			if anim_player.has_animation(anim):
 				set_animation(anim, 1)
+
 func set_tranquilized():
 	if not tranq:
 		tranq = true
@@ -559,12 +520,3 @@ func tranq_timeout():
 	tranq = false
 	set_collision_layer_bit(4, true)
 	flee = false
-
-
-
-
-
-
-
-
-

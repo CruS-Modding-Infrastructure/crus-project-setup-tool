@@ -1,18 +1,5 @@
 extends Spatial
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 func player_use():
 		Global.objectives = 0
 		Global.objective_complete = false

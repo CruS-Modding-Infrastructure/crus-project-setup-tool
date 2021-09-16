@@ -34,14 +34,9 @@ func _ready():
 		global_transform.origin.z -= mesh_instance.get_aabb().position.z
 		t = t.translated(Vector3(mesh_instance.get_aabb().position.x + mesh_instance.get_aabb().size.x * 0.5, 0, mesh_instance.get_aabb().position.z))
 	
-
-	
 	mesh_instance.transform = t
 	collision_shape.transform = t
-
-
-
-
+	
 	audio_player = AudioStreamPlayer3D.new()
 	get_parent().call_deferred("add_child", audio_player)
 	yield (get_tree(), "idle_frame")

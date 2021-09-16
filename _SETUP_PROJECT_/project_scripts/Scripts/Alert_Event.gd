@@ -1,20 +1,7 @@
 extends Area
 
-
-
-
-
-
-
-
 func _ready():
 	pass
-
-
-
-
-
-
 
 func _on_Spatial_body_entered(body):
 	if body == Global.player:

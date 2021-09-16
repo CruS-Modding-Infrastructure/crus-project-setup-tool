@@ -1,14 +1,9 @@
 extends KinematicBody
 
-
-
-
-
 var t = 0
 var a = 1
 var mesh:MeshInstance
 var glob
-
 
 func _ready():
 	glob = global_transform.origin
@@ -16,7 +11,6 @@ func _ready():
 		if child.get_class() == "MeshInstance":
 			mesh = child
 	a = mesh.get_aabb().size.y
-
 
 func _physics_process(delta):
 	t += delta * 3

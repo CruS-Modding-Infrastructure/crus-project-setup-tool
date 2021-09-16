@@ -1,15 +1,11 @@
 extends KinematicBody
 
-
-
-
-
 var velocity = Vector3(1, 1, 1)
 var gravity = 22
-export  var particle = true
-export  var mass = 1
-export  var shell = false
-export  var stay_active = false
+export var particle = true
+export var mass = 1
+export var shell = false
+export var stay_active = false
 var impact_sound:Array
 export  var sounds = false
 var rot_changed = Vector3(0, 0, 0)
@@ -17,8 +13,7 @@ var t = 0
 var water = false
 var finished = false
 var acid = preload("res://Entities/Bullets/Acid.tscn")
-onready  var mesh = $MeshInstance
-
+onready var mesh = $MeshInstance
 
 func _ready():
 	set_collision_layer_bit(6, 1)
@@ -28,7 +23,6 @@ func _ready():
 		impact_sound = [$Sound1, $Sound2, $Sound3]
 		for sound in impact_sound:
 			sound.pitch_scale -= mass * 0.1
-
 
 func _physics_process(delta):
 	if water:

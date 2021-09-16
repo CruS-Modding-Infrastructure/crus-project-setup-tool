@@ -1,9 +1,5 @@
 extends KinematicBody
 
-
-
-
-
 var health = 300
 var type = 1
 var frequency = 50
@@ -41,14 +37,13 @@ func _physics_process(delta):
 				yield (get_tree(), "idle_frame")
 				yield (get_tree(), "idle_frame")
 				rocket_launcher()
+
 func rocket_launcher()->void :
 	var missile_new = BULLETS.instance()
 	get_parent().get_parent().get_parent().add_child(missile_new)
 	missile_new.add_collision_exception_with(self)
 	missile_new.global_transform.origin = global_transform.origin
 	missile_new.set_velocity(30, (global_transform.origin - (Global.player.global_transform.origin + Vector3.UP * 50 + Vector3(0, 0, sin(t * 0.5) * 25))).normalized(), global_transform.origin)
-
-
 
 func damage(dmg, nrml, pos, shoot_pos):
 	if not activated:

@@ -30,31 +30,12 @@ func _ready():
 	bell_audio.stream = load("res://Sfx/Environment/Elevator_Bell.wav")
 	move_audio.stream = load("res://Sfx/Environment/Elevator_Move.wav")
 
-
 func _process(delta):
 	last_pos = global_transform.origin
 	if not stopped:
 		if not move_audio.playing:
 			move_audio.play()
 		translate(Vector3(0, speed * delta, 0))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 func stop():
 	stopped = true
@@ -64,6 +45,4 @@ func stop():
 	move_audio.stop()
 
 func use():
-	
-		
 	stopped = false

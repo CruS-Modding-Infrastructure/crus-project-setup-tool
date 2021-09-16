@@ -8,7 +8,6 @@ func _ready():
 	set_collision_layer_bit(0, 0)
 	set_collision_mask_bit(6, 1)
 
-
 func _on_Area_body_entered(body):
 	if body.has_method("set_toxic"):
 		body.set_toxic()

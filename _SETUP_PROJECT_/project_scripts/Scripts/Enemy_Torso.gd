@@ -1,30 +1,23 @@
 extends KinematicBody
 
-
-
-
-
 var soul
-export  var alive_head = false
-export  var head = false
-export  var poisonous = false
+export var alive_head = false
+export var head = false
+export var poisonous = false
 var headoff = false
 var head_mesh
-export  var gibbable = true
+export var gibbable = true
 var boresound
 var bored = false
-export  var head_health = 40
+export var head_health = 40
 var damage_multiplier = 1
 var cancer_orb = preload("res://Cancerball.tscn")
 var gibflag = false
 var bloodparticles:Array = [preload("res://Entities/Particles/Blood_Particle.tscn"), preload("res://Entities/Particles/Blood_Particle3.tscn")]
 onready  var deadhead = get_node("../Dead_Head")
 
-export  var type = 0
-
-
-
-onready  var head_gib = preload("res://Entities/Physics_Objects/Head_Gib.tscn")
+export var type = 0
+onready var head_gib = preload("res://Entities/Physics_Objects/Head_Gib.tscn")
 
 func _ready():
 	set_physics_process(false)
@@ -59,9 +52,6 @@ func cancer():
 	soul.remove_objective()
 	soul.queue_free()
 
-
-
-
 func _physics_process(delta):
 	if bored:
 		head_health -= 1
@@ -76,11 +66,13 @@ func set_water(a):
 	if head:
 		if soul.body.has_method("set_water") and not soul.body.dead:
 			soul.body.set_water(a)
+
 func add_velocity(normal, amount):
 	soul.add_velocity(normal, amount)
 
 func tranquilize(dart):
 	soul.set_tranquilized(dart)
+
 func tranq_timeout(dart):
 	soul.tranq_timeout(dart)
 
@@ -119,7 +111,7 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 			head_mesh.hide()
 		$CollisionShape.disabled = true
 		gibflag = true
-		
+
 func player_use():
 	if get_collision_layer_bit(8):
 		if not soul.armored and Global.husk_mode:
@@ -131,8 +123,10 @@ func player_use():
 				Global.player.set_toxic()
 		else :
 			Global.player.weapon.hold(soul.body)
+
 func remove_weapon():
 	soul.remove_weapon()
+
 func piercing_damage(damage, collision_n, collision_p, shooter_pos):
 	soul.piercing_damage(damage * damage_multiplier, collision_n, collision_p)
 	if head:
@@ -153,6 +147,7 @@ func piercing_damage(damage, collision_n, collision_p, shooter_pos):
 			head_mesh.hide()
 		$CollisionShape.disabled = true
 		gibflag = true
+
 func already_dead():
 	headoff = true
 

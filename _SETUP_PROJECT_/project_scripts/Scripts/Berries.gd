@@ -5,11 +5,6 @@ export  var healing = false
 export  var healing_amount = 25
 export  var kinematic = false
 
-
-
-
-
-
 func _ready():
 	pass
 
