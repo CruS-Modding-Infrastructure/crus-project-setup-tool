@@ -1,7 +1,5 @@
 extends KinematicBody
 
-
-
 var rotation_helper:Spatial
 var player_ray:RayCast
 var held = false
@@ -160,38 +158,6 @@ func _ready()->void :
 	nearby = soul.new_alert_sphere.get_overlapping_bodies()
 	move()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 func _physics_process(delta)->void :
 	if player == null:
 		return 
@@ -211,8 +177,6 @@ func _physics_process(delta)->void :
 		if player_distance > 30:
 			return 
 	
-
-	
 	height_difference = player.global_transform.origin.y > global_transform.origin.y and abs(player.global_transform.origin.y - global_transform.origin.y) > 21
 	anim_counter += 1
 	time += 1
@@ -231,23 +195,29 @@ func _physics_process(delta)->void :
 			shoot_mode = true
 		elif not civ_killer:
 			shoot_mode = false
+	
 	if move_speed == 0:
 		if player_spotted and not dead and not tranq:
 			rotate_towards = lerp(rotate_towards, player.global_transform.origin, 6 * delta)
 			look_at(rotate_towards, Vector3.UP)
 			rotation.x = 0
 		shoot_mode = true
+	
 	if not player_spotted and not dead and not tranq and (player_distance < 40 or move_speed != 0):
 		wait_for_player(delta)
+	
 	track_player(delta)
+	
 	if not sight_potential and player_distance > 20 and fmod(time, 20) != 0 and not alerted and not player_spotted:
 		return 
+	
 	if fmod(time, 5) == 0 and sight_potential:
 		heading = - Vector3(player.global_transform.origin.x, 0, player.global_transform.origin.z).direction_to(Vector3(global_transform.origin.x, 0, global_transform.origin.z))
 		
 		line_of_sight = global_transform.origin.direction_to(forward_helper.global_transform.origin).dot(heading)
 		heading_y = (player.global_transform.origin - global_transform.origin).normalized()
 		line_of_sight_y = transform.basis.xform(Vector3.UP).dot(heading_y)
+	
 	if fmod(time, 20) == 0 and player_distance < 30:
 		if velocity_ray.is_colliding():
 			var collider = velocity_ray.get_collider()
@@ -269,10 +239,9 @@ func _physics_process(delta)->void :
 					collider.piercing_damage(200, normal, point, global_transform.origin)
 	velocity.y -= gravity * delta
 	if not dead and not tranq:
-
 		if player_spotted:
 			player_spotted()
-
+		
 		if path.size() > 0 and ((player_distance > engage_distance and ( not shoot_mode or melee)) or not in_sight) and player_spotted:
 				find_path(delta)
 		else :
@@ -283,34 +252,27 @@ func _physics_process(delta)->void :
 	elif is_on_floor():
 			velocity.x *= 0.95
 			velocity.z *= 0.95
-
 	move()
-	
-	
-		
-
 
 
 func move()->void :
-	
 	if crusher:
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			if collision.collider != null:
 				if collision.collider.has_method("damage") and Vector3(velocity.x, 0, velocity.y).length() > 2:
 					collision.collider.damage(100, collision.normal, collision.position, global_transform.origin)
-		
-		
-		
-		
+	
 	velocity = move_and_slide(velocity, Vector3.UP, false, 4, 0.785398)
 
 func wait_for_player(delta)->void :
 	if not patrol:
 		if move_speed == 0:
 			anim_player.play("Idle", - 1, 1)
+		
 		if is_on_floor():
 			velocity.y = 0
+		
 		if path.size() == 0:
 			anim_player.play("Idle", - 1, 1)
 			if fmod(time, alertness) == 0:
@@ -350,6 +312,7 @@ func wait_for_player(delta)->void :
 			var result = space_state.intersect_ray(global_transform.origin, global_transform.origin + offset)
 			if result:
 				path = navigation.get_simple_path(global_transform.origin, result.position)
+		
 		if path.size() > 0:
 			find_path(delta)
 

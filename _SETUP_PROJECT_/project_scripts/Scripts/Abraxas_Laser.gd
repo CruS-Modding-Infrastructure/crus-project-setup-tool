@@ -1,9 +1,5 @@
 extends KinematicBody
 
-
-
-
-
 var type = 1
 var laser
 var health = 300
@@ -15,13 +11,10 @@ var look_towards = Vector3.ZERO
 var t = 0
 var disabled = true
 
-
 func _ready():
 	look_towards = Global.player.global_transform.origin
 	laser = $Laser
 	particle = $Particles
-
-
 
 func _process(delta):
 	t += 1
@@ -51,14 +44,11 @@ func _process(delta):
 		laser.scale.z = lerp(laser.scale.z, global_transform.origin.distance_to(result.position) * 0.5, 0.2)
 		laser.look_at(result.position, Vector3.UP)
 		if result.collider == Global.player:
-			Global.player.damage(20, result.normal, result.position, global_transform.origin)
-		
+			Global.player.damage(20, result.normal, result.position, global_transform.origin)		
 	else :
 		particle.hide()
 		laser.scale.z = 400
-		
-	
-			
+
 func damage(dmg, nrml, pos, shoot_pos):
 	if not active:
 		return 

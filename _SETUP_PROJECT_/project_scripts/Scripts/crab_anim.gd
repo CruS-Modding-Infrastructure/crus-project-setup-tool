@@ -1,9 +1,5 @@
 extends Spatial
 
-
-
-
-
 var t = 0
 var arm_l:Array
 var claw_l:Array
@@ -19,7 +15,6 @@ func _ready():
 	claw_r = [$Claw_Right_L, $Claw_Right_R]
 	legs_1 = [$Leg_L_F, $Leg_R_B]
 	legs_2 = [$Leg_R_F, $Leg_L_B]
-	
 	pass
 
 func _physics_process(delta):

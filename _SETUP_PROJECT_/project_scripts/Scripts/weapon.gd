@@ -2,11 +2,72 @@ extends Spatial
 export  var player:bool = false
 export  var enemy_accuracy:float = 0.1
 
-
-
-enum {W_PISTOL, W_SMG, W_TRANQ, W_BLACKJACK, W_SHOTGUN, W_ROCKET_LAUNCHER, W_SNIPER, W_AR, W_SILENCED_SMG, W_NAMBU, W_GAS, W_MG3, W_AUTOSHOTGUN, W_MAUSER, W_BORE, W_MKR, W_RADIATOR, W_FLASHLIGHT, W_ZIPPY, W_AN94, W_VAG72, W_STEYR, W_CANCER, W_ROD, W_FLAMETHROWER, W_SKS, W_NAILER, W_SHOCK, W_LIGHT}
-const W_NAMES = ["10x25mm Subsonic", "9x19mm Corporate", "Animal Tranquilizer", null, "12 Gauge Flechette", "125mm HEAT", "20x124mm AP", "4.73×33mm Caseless", "9x19mm Goreforce", ".38 Suspicious", "50mm Flesh Eater Grenade", "7.62×51mm DU", "12 Gauge Super Auto", "7.62x51mm Executive", "Null", "4.5×26mm MCR", "null", "null", ".22 SR", "5.45×39mm Abyss", "7.62mm Rancid", "5.56×45mm Sabot", "DNA Scrambler", null, "Fuel", "7.62×39mm Financial", "1x45mm Depleted Uranium Nail", "12 Gauge Shockforce", "Thrngnrngnrxnon"]
-enum {T_FLESH, T_ENVIRONMENT}
+enum {
+	W_PISTOL,
+	W_SMG,
+	W_TRANQ,
+	W_BLACKJACK,
+	W_SHOTGUN,
+	W_ROCKET_LAUNCHER,
+	W_SNIPER,
+	W_AR,
+	W_SILENCED_SMG,
+	W_NAMBU,
+	W_GAS,
+	W_MG3,
+	W_AUTOSHOTGUN,
+	W_MAUSER,
+	W_BORE,
+	W_MKR,
+	W_RADIATOR,
+	W_FLASHLIGHT,
+	W_ZIPPY,
+	W_AN94,
+	W_VAG72,
+	W_STEYR,
+	W_CANCER,
+	W_ROD,
+	W_FLAMETHROWER,
+	W_SKS,
+	W_NAILER,
+	W_SHOCK,
+	W_LIGHT
+}
+const W_NAMES = [
+	"10x25mm Subsonic", 
+	"9x19mm Corporate", 
+	"Animal Tranquilizer", 
+	null, 
+	"12 Gauge Flechette", 
+	"125mm HEAT", 
+	"20x124mm AP", 
+	"4.73×33mm Caseless", 
+	"9x19mm Goreforce", 
+	".38 Suspicious", 
+	"50mm Flesh Eater Grenade", 
+	"7.62×51mm DU", 
+	"12 Gauge Super Auto", 
+	"7.62x51mm Executive", 
+	"Null", 
+	"4.5×26mm MCR", 
+	"null", 
+	"null", 
+	".22 SR", 
+	"5.45×39mm Abyss", 
+	"7.62mm Rancid", 
+	"5.56×45mm Sabot", 
+	"DNA Scrambler", 
+	null, 
+	"Fuel", 
+	"7.62×39mm Financial", 
+	"1x45mm Depleted Uranium Nail", 
+	"12 Gauge Shockforce", 
+	"Thrngnrngnrxnon"
+]
+enum {
+	T_FLESH,
+	T_ENVIRONMENT
+}
 var leaning_modifier = 0
 var fishing_hook:KinematicBody
 var line_mesh:Mesh
@@ -43,66 +104,75 @@ var grenade_ammo = 2
 var flashlight
 var glob
 var magazine_ammo:Array = [12, 30, 1, 1, 5, 1, 4, 45, 25, 5, 5, 150, 10, 3, 1, 50, 1, 1, 10, 30, 24, 24, 6, 1, 250, 10, 100, 5, 30]
-const SHELLS = [preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				null, 
-				null, 
-				preload("res://Entities/Physics_Objects/Shell.tscn"), 
-				null, 
-				preload("res://Entities/Physics_Objects/20_mm_shell.tscn"), 
-				null, 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				null, 
-				null, 
-				null, 
-				null, 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				null, 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/DNA_shell.tscn"), 
-				null, 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
-				null, 
-				preload("res://Entities/Physics_Objects/Shell.tscn"), 
-				null]
+
+const GENERIC_SHELL = preload("res://Entities/Physics_Objects/Generic_Shell.tscn")
+const SHELL = preload("res://Entities/Physics_Objects/Shell.tscn")
+const TWENTY_MM_SHELL = preload("res://Entities/Physics_Objects/20_mm_shell.tscn")
+const DNA_SHELL = preload("res://Entities/Physics_Objects/DNA_shell.tscn")
+const SHELLS = [
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	null, 
+	null, 
+	preload("res://Entities/Physics_Objects/Shell.tscn"), 
+	null, 
+	preload("res://Entities/Physics_Objects/20_mm_shell.tscn"), 
+	null, 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	null, 
+	null, 
+	null, 
+	null, 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	null, 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/DNA_shell.tscn"), 
+	null, 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	preload("res://Entities/Physics_Objects/Generic_Shell.tscn"), 
+	null, 
+	preload("res://Entities/Physics_Objects/Shell.tscn"), 
+	null
+]
 const IDLE_ANIM:Array = ["Pistol_Idle", "SMG_Idle", "Pistol_Idle", "Baton_Idle", "Shotgun_Idle", "Rocket_Launcher_Idle", "Sniper_Idle", "AR_Idle", "S_SMG_idle", "Nambu_Idle", "Gas_Idle", "MG3_Idle", "Autoshotgun_Idle", "Mauser_Idle", "Bore_Idle", "AR_Idle", "AR_Idle", "Flashlight_Idle", "Pistol_Idle", "AR_Idle", "Pistol_Idle", "AR_Idle", "Pistol_Idle", "Baton_Idle", "AR_Idle", "Shotgun_Idle", "Pistol_Idle", "Pistol_Idle", "Nogun"]
 const FIRE_ANIM:Array = ["Pistol_Fire", "SMG_Fire", "Pistol_Fire", "Baton_Fire", "Shotgun_Fire", "Rocket_Launcher_Fire", "Sniper_Fire", "AR_Fire", "S_SMG_fire", "Nambu_Fire", "Gas_Fire", "MG3_Fire", "Autoshotgun_Fire", "Mauser_Fire", "Bore_Idle", "AR_Fire", "AR_Idle", "Flashlight_Idle", "Pistol_Fire", "AR_Fire", "Pistol_Fire", "AR_Fire", "Pistol_Fire", "Baton_Fire", "AR_Idle", "Shotgun_Fire", "Pistol_Fire", "Pistol_Fire", "Nogun"]
-const DECALS:Array = [preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				null, 
-				null, 
-				preload("res://Entities/Decals/Flechette.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Flechette.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				null, 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Flechette.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				null, 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				null, 
-				null, 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Flechette.tscn"), 
-				preload("res://Entities/Decals/DNA_Decal.tscn"), 
-				null, 
-				null, 
-				preload("res://Entities/Decals/Decal.tscn"), 
-				preload("res://Entities/Decals/Nail.tscn"), 
-				preload("res://Entities/Decals/Flechette.tscn"), 
-				null]
+const DECALS:Array = [
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	null, 
+	null, 
+	preload("res://Entities/Decals/Flechette.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Flechette.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	null, 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Flechette.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	null, 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	null, 
+	null, 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Flechette.tscn"), 
+	preload("res://Entities/Decals/DNA_Decal.tscn"), 
+	null, 
+	null, 
+	preload("res://Entities/Decals/Decal.tscn"), 
+	preload("res://Entities/Decals/Nail.tscn"), 
+	preload("res://Entities/Decals/Flechette.tscn"), 
+	null
+]
 const BULLETS = preload("res://Entities/Bullets/Missile_Kinematic.tscn")
 const LIGHT_BULLET = preload("res://Entities/Bullets/Light_Bullet.tscn")
 const FIRE = preload("res://Entities/Bullets/Fire.tscn")
@@ -149,28 +219,28 @@ var weapon2
 var held_weapon = 1
 var scope_mat:SpatialMaterial
 var scope_camera:Camera
-var AR_mesh
-var MKR_mesh
-var RAD_mesh
-var AN94_mesh
-var PISTOL_mesh
-var ZIPPY_mesh
-var VAG72_mesh
-var ROD_mesh
-var BATON_mesh
-var DNA_mesh
-var STEYR_mesh
-var DART_mesh
-var SHOTGUN_mesh
-var LIGHT_mesh
-var SKS_mesh
+onready var AR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/AR")
+onready var PISTOL_mesh
+onready var ZIPPY_mesh
+onready var ROD_mesh
+onready var BATON_mesh
+onready var VAG72_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 4/Vag72")
+onready var DNA_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 4/Dna")
+onready var AN94_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/AN94")
+onready var MKR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/MKR")
+onready var RAD_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/RADGUN")
+onready var STEYR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/STEYR")
+onready var DART_mesh
+onready var SHOTGUN_mesh
+onready var LIGHT_mesh
+onready var SKS_mesh
+onready var FT_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/FLAMETHROWER")
+onready var NAILER_mesh
+onready var SHOCK_mesh
 var RAD_light
-var AR_dot
-var FT_mesh
-var NAILER_mesh
-var SHOCK_mesh
-var left_arm_mesh
-var right_arm_mesh
+onready var AR_dot = get_node_or_null("Player_Weapon/AR_dot")
+onready var left_arm_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/Left_Arm")
+onready var right_arm_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/Right_Arm")
 var muzzle_light
 var left_weapon
 var leaning
@@ -178,6 +248,7 @@ var cylinder_velocity = 0
 var radiation_mesh
 var radiation_cylinder
 var player_muzzle_flash
+var muzzle_flash_on: bool = false
 var use_ray
 var orb_anim
 var blackjacktimer:Timer
@@ -186,13 +257,14 @@ var regentimer2:Timer
 var grapple_point = Vector3.ZERO
 var grapple_flag = false
 var melee = false
+var weapon_switched = true
+
 func _ready()->void :
 	glob = Global
 	if not player:
 		if Global.implants.head_implant.shrink:
 			enemy_accuracy *= 0.2
 		set_process_input(false)
-		
 		set_physics_process(false)
 		translation.z = 0
 		if current_weapon >= W_BLACKJACK:
@@ -224,11 +296,6 @@ func _ready()->void :
 		anim = $Player_Weapon / AnimationPlayer
 		orb_anim = $orbarms / AnimationPlayer
 		
-		
-		AR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/AR")
-		AR_dot = get_node_or_null("Player_Weapon/AR_dot")
-		left_arm_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/Left_Arm")
-		right_arm_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/Right_Arm")
 		if glob.implants.torso_implant.stealth:
 			left_arm_mesh.material_override = load("res://Materials/seethrough.tres")
 			right_arm_mesh.material_override = load("res://Materials/seethrough.tres")
@@ -242,13 +309,6 @@ func _ready()->void :
 		AR_mesh.set_layer_mask_bit(0, 0)
 		reload_sound = $Reload
 		laser_dot = $Laser_Dot
-		VAG72_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 4/Vag72")
-		DNA_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 4/Dna")
-		AN94_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/AN94")
-		MKR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/MKR")
-		RAD_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/RADGUN")
-		STEYR_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/STEYR")
-		FT_mesh = get_node_or_null("Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 9/FLAMETHROWER")
 		SHOTGUN_mesh = $Player_Weapon / Player_Weapon / Skeleton / BoneAttachment / Shotgun
 		SKS_mesh = $Player_Weapon / Player_Weapon / Skeleton / BoneAttachment / SKS
 		ROD_mesh = $"Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 24/Rod"
@@ -269,24 +329,6 @@ func _ready()->void :
 		right_arm_mesh.set_layer_mask_bit(0, 0)
 		right_arm_mesh.set_layer_mask_bit(2, 1)
 		IM2 = $ImmediateGeometry2
-		
-		
-		
-		
-		
-		
-		
-
-
-
-
-
-
-
-
-
-
-	
 		weapon1 = glob.menu.weapon_1
 		weapon2 = glob.menu.weapon_2
 		ammo[weapon1] += MAX_MAG_AMMO[weapon1] * glob.implants.torso_implant.ammo_bonus
@@ -326,6 +368,7 @@ func _ready()->void :
 
 func alert_body_entered(b):
 	nearby.append(b)
+
 func alert_body_exited(b):
 	nearby.remove(nearby.find(b))
 
@@ -369,12 +412,13 @@ func regen_timeout1():
 	if weapon1 != null:
 		magazine_ammo[weapon1] += 1
 		set_UI_ammo()
+
 func regen_timeout2():
 	if weapon2 != null:
 		magazine_ammo[weapon2] += 1
 		set_UI_ammo()
+
 func _physics_process(delta):
-	
 	if disabled:
 		return 
 	recoil = lerp(recoil, 0, 4 * delta)
@@ -394,11 +438,13 @@ func _physics_process(delta):
 	
 	if kickflag:
 		kicktimer += delta * 35
+
 func draw_line(begin, end):
 	begin = global_transform.xform_inv(begin)
 	end = global_transform.xform_inv(end)
 	IM.add_vertex(begin)
 	IM.add_vertex(end)
+
 func draw_line2(begin, end):
 	begin = global_transform.xform_inv(begin)
 	end = global_transform.xform_inv(end)
@@ -410,15 +456,84 @@ func normalize(value, mn, mx):
 	norm = (value - mn) / (mx - mn)
 	return norm
 
-func _process(delta)->void :
+# merge all the process() stuff into this one function which hides all weapon meshes and effects
+func reset_weapons()->void:
+	LIGHT_mesh.hide()
+	FT_mesh.hide()
+	STEYR_mesh.hide()
+	AR_mesh.hide()
+	AR_dot.hide()
+	MKR_mesh.hide()
+	RAD_mesh.hide()
+	RAD_light.hide()
+	AN94_mesh.hide()
+	ZIPPY_mesh.hide()
+	SHOCK_mesh.hide()
+	NAILER_mesh.hide()
+	DNA_mesh.hide()
+	VAG72_mesh.hide()
+	DART_mesh.hide()
+	PISTOL_mesh.hide()
+	BATON_mesh.hide()
+	SHOTGUN_mesh.hide()
+	ROD_mesh.hide()
+	$"Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 2/Shotgun_Pump".hide()
+	
+	# extra stuff
+	laser_dot.hide()
+	melee = false
+
+# we can call the above function here and do everything in a single match statement
+func update_weapon()->void:
+	reset_weapons()
+	match current_weapon:
+		W_LIGHT:
+			LIGHT_mesh.show()
+		W_AR:
+			AR_mesh.show()
+			AR_dot.show()
+		W_MKR:
+			MKR_mesh.show()
+		W_RADIATOR:
+			RAD_mesh.show()
+			RAD_light.show()
+		W_AN94:
+			AN94_mesh.show()
+		W_STEYR:
+			STEYR_mesh.show()
+		W_FLAMETHROWER:
+			FT_mesh.show()
+		W_PISTOL:
+			PISTOL_mesh.show()
+			laser_dot.show()
+		W_TRANQ:
+			DART_mesh.show()
+		W_ZIPPY:
+			ZIPPY_mesh.show()
+		W_VAG72:
+			VAG72_mesh.show()
+		W_CANCER:
+			DNA_mesh.show()
+		W_NAILER:
+			NAILER_mesh.show()
+			laser_dot.show()
+		W_SHOCK:
+			SHOCK_mesh.show()
+		W_SHOTGUN:
+			SHOTGUN_mesh.show()
+			$"Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 2/Shotgun_Pump".show()
+		W_SKS:
+			SKS_mesh.show()
+		W_BLACKJACK:
+			BATON_mesh.show()
+			melee = true
+		W_ROD:
+			ROD_mesh.show()
+			melee = true
+
+func _process(delta)->void:
 	if disabled:
 		return 
-	
-		
-			
-				
-				
-				
 	t += 1
 	if not player:
 		raycast_init_rot.x = rand_range( - enemy_accuracy, enemy_accuracy)
@@ -426,23 +541,13 @@ func _process(delta)->void :
 		if (reload_timer.is_stopped() and magazine_ammo[current_weapon] == 0 and ammo[current_weapon] > 0):
 			reload()
 		return 
-		
-
-	
-	
 	
 	if player:
 		if Global.implants.arm_implant.ricochet:
 			if raycast.is_colliding():
 				IM2.clear()
 				IM2.begin(line_mesh.PRIMITIVE_LINES)
-				
-				
-				
-				
-				
-				
-				
+
 				var begin = raycast.get_collision_point()
 				var end = begin + (begin - raycast.global_transform.origin).bounce(raycast.get_collision_normal())
 				
@@ -470,10 +575,6 @@ func _process(delta)->void :
 			if is_instance_valid(fishing_hook):
 				fishing_hook.queue_free()
 			fishing_hook = null
-		if current_weapon == W_BLACKJACK or current_weapon == W_ROD:
-			melee = true
-		else :
-			melee = false
 		if grapple_flag:
 			if grapple_point != null:
 				glob.player.grapple(grapple_point)
@@ -482,136 +583,26 @@ func _process(delta)->void :
 		
 		radiation_cylinder.rotation.z -= cylinder_velocity
 		RAD_light.light_energy = cylinder_velocity * 10
-		if current_weapon != W_RADIATOR:
-			RAD_light.hide()
-		else :
-			RAD_light.show()
+		
 		cylinder_velocity = lerp(cylinder_velocity, 0, 0.01)
 		
 		radiation_mesh.scale.z = lerp(radiation_mesh.scale.z, 0, 0.5)
 		radiation_mesh.scale.x = lerp(radiation_mesh.scale.x, 0, 0.5)
-		if current_weapon == W_LIGHT:
-			LIGHT_mesh.show()
-		else :
-			LIGHT_mesh.hide()
-		if current_weapon == W_AR:
-			FT_mesh.hide()
-			STEYR_mesh.hide()
-			AR_mesh.show()
-			MKR_mesh.hide()
-			RAD_mesh.hide()
-			AN94_mesh.hide()
-		elif current_weapon == W_MKR:
-			FT_mesh.hide()
-			STEYR_mesh.hide()
-			AR_mesh.hide()
-			MKR_mesh.show()
-			RAD_mesh.hide()
-			AN94_mesh.hide()
-		elif current_weapon == W_RADIATOR:
-			FT_mesh.hide()
-			STEYR_mesh.hide()
-			AR_mesh.hide()
-			MKR_mesh.hide()
-			RAD_mesh.show()
-			AN94_mesh.hide()
-		elif current_weapon == W_AN94:
-			FT_mesh.hide()
-			STEYR_mesh.hide()
-			AR_mesh.hide()
-			MKR_mesh.hide()
-			RAD_mesh.hide()
-			AN94_mesh.show()
-		elif current_weapon == W_STEYR:
-			FT_mesh.hide()
-			STEYR_mesh.show()
-			AR_mesh.hide()
-			MKR_mesh.hide()
-			RAD_mesh.hide()
-			AN94_mesh.hide()
-		elif current_weapon == W_FLAMETHROWER:
-			FT_mesh.show()
-			STEYR_mesh.hide()
-			AR_mesh.hide()
-			MKR_mesh.hide()
-			RAD_mesh.hide()
-			AN94_mesh.hide()
-		if current_weapon == W_PISTOL:
-			SHOCK_mesh.hide()
-			NAILER_mesh.hide()
-			DNA_mesh.hide()
-			PISTOL_mesh.show()
-			VAG72_mesh.hide()
-			DART_mesh.hide()
-			ZIPPY_mesh.hide()
-		elif current_weapon == W_TRANQ:
-			SHOCK_mesh.hide()
-			NAILER_mesh.hide()
-			DNA_mesh.hide()
-			VAG72_mesh.hide()
-			DART_mesh.show()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.hide()
-		elif current_weapon == W_ZIPPY:
-			SHOCK_mesh.hide()
-			NAILER_mesh.hide()
-			DNA_mesh.hide()
-			VAG72_mesh.hide()
-			DART_mesh.hide()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.show()
-		elif current_weapon == W_VAG72:
-			SHOCK_mesh.hide()
-			NAILER_mesh.hide()
-			DNA_mesh.hide()
-			VAG72_mesh.show()
-			DART_mesh.hide()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.hide()
-		elif current_weapon == W_CANCER:
-			SHOCK_mesh.hide()
-			NAILER_mesh.hide()
-			DNA_mesh.show()
-			VAG72_mesh.hide()
-			DART_mesh.hide()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.hide()
-		elif current_weapon == W_NAILER:
-			SHOCK_mesh.hide()
-			NAILER_mesh.show()
-			DNA_mesh.hide()
-			VAG72_mesh.hide()
-			DART_mesh.hide()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.hide()
-		elif current_weapon == W_SHOCK:
-			SHOCK_mesh.show()
-			NAILER_mesh.hide()
-			DNA_mesh.hide()
-			VAG72_mesh.hide()
-			DART_mesh.hide()
-			PISTOL_mesh.hide()
-			ZIPPY_mesh.hide()
-		if current_weapon == W_SHOTGUN:
-			SHOTGUN_mesh.show()
-			$"Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 2/Shotgun_Pump".show()
-			SKS_mesh.hide()
-		elif current_weapon == W_SKS:
-			SHOTGUN_mesh.hide()
-			SKS_mesh.show()
-			$"Player_Weapon/Player_Weapon/Skeleton/BoneAttachment 2/Shotgun_Pump".hide()
 		
+	# weapon_switched is what actually gives the major performance gain
+	# it calls update_weapon only when needed as opposed to every single game tick
+		if weapon_switched:
+			weapon_switched = false
+			update_weapon()
 		
-		if current_weapon == W_BLACKJACK:
-			BATON_mesh.show()
-			ROD_mesh.hide()
-		elif current_weapon == W_ROD:
-			BATON_mesh.hide()
-			ROD_mesh.show()
 		if current_weapon == W_FLAMETHROWER and not Input.is_action_pressed("mouse_1"):
 				audio[current_weapon].stop()
 		leaning = Input.is_action_pressed("Lean_Left") or Input.is_action_pressed("Lean_Right")
-		player_muzzle_flash.hide()
+		
+		if muzzle_flash_on:
+			muzzle_flash_on = false
+			player_muzzle_flash.hide()
+		
 		if Input.is_action_just_pressed("drop") and current_weapon != null:
 			var new_weapon_drop = weapon_drop.instance()
 			glob.player.get_parent().add_child(new_weapon_drop)
@@ -702,12 +693,7 @@ func _process(delta)->void :
 		else :
 			player_weapon.transform.origin.y = lerp(player_weapon.transform.origin.y, - 0.078, 5 * delta)
 			leaning_modifier = 0
-		
-		
-		
-		
-		
-		
+
 		if use_ray.is_colliding():
 			var collider = use_ray.get_collider()
 			if collider != null:
@@ -718,14 +704,6 @@ func _process(delta)->void :
 		else :
 			glob.player.grab_hand.hide()
 		
-		if current_weapon == W_AR:
-			
-			AR_dot.show()
-			
-			
-			
-		else :
-			AR_dot.hide()
 		if current_weapon == W_PISTOL or current_weapon == W_SILENCED_SMG or current_weapon == W_NAILER:
 			if raycast.is_colliding():
 				glob.player.UI.distance(global_transform.origin.distance_to(raycast.get_collision_point()))
@@ -734,13 +712,11 @@ func _process(delta)->void :
 				else :
 					raycast.rotation = Vector3(sin(t * 0.05) * 0.05, cos(t * 0.0732) * 0.051, raycast_init_rot.z)
 				laser_dot.global_transform.origin = raycast.get_collision_point() + raycast.get_collision_normal() * 1e-06
-				laser_dot.show()
 				
 				glob.player.reticle.reticle_color = Color(0, 1, 0, 0.5)
 		else :
 			glob.player.reticle.show()
 			glob.player.reticle.reticle_color = Color(1, 0, 0, 1)
-			laser_dot.hide()
 		
 		UI.reload_pos.y = rotation_degrees.x / 75 * UI.get_viewport().size.y
 		
@@ -774,16 +750,7 @@ func _process(delta)->void :
 			if not glob.player.psychosis:
 				glob.player.player_view.fov = lerp(glob.player.player_view.fov, glob.FOV, 5 * delta)
 			glob.player.set_scope(false)
-			
-			
-				
-	
-	
-	
-	
-
 	if player:
-		
 		if muzzle_light.light_energy < 0.1:
 			muzzle_light.hide()
 		else :
@@ -993,9 +960,6 @@ func _process(delta)->void :
 			if magazine_ammo[current_weapon] > 0:
 				rotation.x = initrot.x
 				shoot()
-				
-
-			
 		
 		if Input.is_action_just_pressed("zoom"):
 			zoom()
@@ -1003,6 +967,7 @@ func _process(delta)->void :
 		if Input.is_action_just_pressed("weapon1") and reload_timer.is_stopped():
 			if current_weapon == weapon1:
 				return 
+			weapon_switched = true
 			anim.stop()
 			anim.play("Nogun", - 1, 100)
 			
@@ -1016,6 +981,7 @@ func _process(delta)->void :
 			set_UI_ammo()
 		
 		if Input.is_action_just_pressed("switch_weapon") and reload_timer.is_stopped():
+			weapon_switched = true
 			anim.stop()
 			anim.play("Nogun", - 1, 100)
 			if current_weapon == weapon1:
@@ -1027,19 +993,20 @@ func _process(delta)->void :
 				player_weapon.hide()
 			else :
 				player_weapon.show()
+			weapon_switched = true
 			Global.player.reticle.update()
 
 		
 		if Input.is_action_just_pressed("weapon2") and reload_timer.is_stopped():
-
 			if current_weapon == weapon2:
 				return 
+			
+			weapon_switched = true
 			anim.stop()
 			anim.play("Nogun", - 1, 100)
 			
 			held_weapon = 2
 			current_weapon = weapon2
-			
 			set_UI_ammo()
 			if current_weapon == null:
 				player_weapon.hide()
@@ -1051,6 +1018,7 @@ func _process(delta)->void :
 			flashlight.show()
 		else :
 			flashlight.hide()
+		
 		if Input.is_action_just_pressed("Use") and $Use_Raycast.is_colliding():
 			var collider = $Use_Raycast.get_collider()
 			if collider.has_method("use"):
@@ -1085,8 +1053,6 @@ func _process(delta)->void :
 			yield (get_tree().create_timer(0.4), "timeout")
 			$Shotgun_Pump.pitch_scale = 0.4
 			$Shotgun_Pump.play()
-			
-
 
 		if Input.is_action_just_pressed("weapon5") and reload_timer.is_stopped() and glob.debug:
 			if current_weapon == W_SILENCED_SMG:
@@ -1104,19 +1070,8 @@ func _process(delta)->void :
 			current_weapon = W_NAILER
 			weapon1 = current_weapon
 			set_UI_ammo()
-		
-		
-				
-				
-	
 
-	
-		
-	
-
-		
 func reload()->void :
-	
 	ammo[current_weapon] -= MAX_MAG_AMMO[current_weapon] - magazine_ammo[current_weapon]
 	magazine_ammo[current_weapon] += MAX_MAG_AMMO[current_weapon] - magazine_ammo[current_weapon]
 	if ammo[current_weapon] <= 0:
@@ -1140,6 +1095,8 @@ func cancer()->void :
 		if player:
 			spawn_shell(SHELLS[current_weapon], 1, 10, get_parent().get_parent().transform.basis.xform(Vector3(5, - 10, 0).normalized()), $Player_Weapon / ShellPosition.global_transform.origin)
 			muzzle_light.light_energy = 1
+			
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 			player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1165,10 +1122,10 @@ func smg()->void :
 			do_damage(collider)
 		timer.start(0.07)
 		recoil += accuracy[current_weapon]
-		
 
 		if player:
 			muzzle_light.light_energy = 1
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 			player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1186,10 +1143,6 @@ func smg()->void :
 
 func steyr()->void :
 	if timer.is_stopped():
-		
-		
-
-
 		if not player:
 			if get_parent().get_parent().muzzleflash:
 				get_parent().get_parent().muzzleflash.show()
@@ -1206,6 +1159,7 @@ func steyr()->void :
 		if magazine_ammo[current_weapon] > 0:
 			if player:
 				muzzle_light.light_energy = 1
+				muzzle_flash_on = true
 				player_muzzle_flash.show()
 				player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 				player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1238,6 +1192,7 @@ func steyr()->void :
 		if magazine_ammo[current_weapon] > 0:
 			if player:
 				muzzle_light.light_energy = 1
+				muzzle_flash_on = true
 				player_muzzle_flash.show()
 				player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 				player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1267,6 +1222,7 @@ func steyr()->void :
 		if magazine_ammo[current_weapon] > 0:
 			if player:
 				muzzle_light.light_energy = 1
+				muzzle_flash_on = true
 				player_muzzle_flash.show()
 				player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 				player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1286,14 +1242,6 @@ func steyr()->void :
 				if collider.has_method("piercing_damage"):
 					collider.piercing_damage(damage[current_weapon], Vector3.ZERO, collision_p, global_transform.origin)
 				do_damage(collider)
-		
-		
-		
-
-
-		
-
-
 
 func mkr()->void :
 	if timer.is_stopped():
@@ -1314,10 +1262,10 @@ func mkr()->void :
 				collider.piercing_damage(damage[current_weapon], Vector3.ZERO, colpoint, global_transform.origin)
 		timer.start(0.03)
 		recoil += accuracy[current_weapon]
-		
 
 		if player:
 			muzzle_light.light_energy = 1
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.rotation.x = rand_range( - PI, PI)
 			player_muzzle_flash.scale = Vector3(rand_range(0.2, 0.5), rand_range(0.2, 0.5), rand_range(0.2, 0.5))
@@ -1384,7 +1332,6 @@ func mg3()->void :
 			if collider.has_method("piercing_damage"):
 				collider.piercing_damage(damage[current_weapon] / 2, Vector3.ZERO, colpoint, global_transform.origin)
 			do_damage(collider)
-
 			
 			if not player and double_mg:
 				yield (get_tree(), "idle_frame")
@@ -1393,7 +1340,6 @@ func mg3()->void :
 				do_damage(collider2)
 				
 		timer.start(0.04)
-		
 		
 		recoil += accuracy[current_weapon]
 		
@@ -1409,8 +1355,6 @@ func mg3()->void :
 			if get_parent().get_parent().muzzleflash:
 				get_parent().get_parent().muzzleflash.show()
 		audio[current_weapon][0].play()
-		
-		
 
 		magazine_ammo[current_weapon] -= 1
 
@@ -1480,7 +1424,6 @@ func nailer()->void :
 			if get_parent().get_parent().muzzleflash:
 				get_parent().get_parent().muzzleflash.show()
 		audio[current_weapon].play()
-		
 
 		magazine_ammo[current_weapon] -= 1
 
@@ -1495,15 +1438,6 @@ func an_94()->void :
 		burst_timer.one_shot = true
 		burst_timer.connect("timeout", self, "an94_internal")
 		burst_timer.start()
-		
-		
-		
-		
-		
-		
-		
-	
-	
 
 func an94_internal():
 		raycast.force_raycast_update()
@@ -1530,7 +1464,6 @@ func an94_internal():
 			anim.stop()
 			anim.play(FIRE_ANIM[current_weapon])
 		audio[current_weapon].play()
-		
 
 		magazine_ammo[current_weapon] -= 1
 
@@ -1550,15 +1483,6 @@ func ar()->void :
 		burst_timer2.connect("timeout", self, "ar_internal")
 		burst_timer2.wait_time = 0.1
 		burst_timer2.start()
-		
-		
-		
-		
-		
-		
-		
-	
-	
 
 func ar_internal():
 		raycast.force_raycast_update()
@@ -1586,8 +1510,8 @@ func ar_internal():
 			anim.play(FIRE_ANIM[current_weapon])
 		audio[current_weapon].play()
 		
-
 		magazine_ammo[current_weapon] -= 1
+
 func zippy()->void :
 	if timer.is_stopped():
 		var rand = randi() % 3
@@ -1603,12 +1527,6 @@ func zippy()->void :
 					ricochet(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 				do_damage(collider)
 				decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
-	
-	
-	
-	
-	
-	
 				do_damage(collider)
 			if player:
 				timer.start(0.07)
@@ -1624,7 +1542,6 @@ func zippy()->void :
 				spawn_shell(SHELLS[current_weapon], 1, 10, get_parent().get_parent().transform.basis.xform(Vector3(5, - 10, 0).normalized()), $Player_Weapon / ShellPosition.global_transform.origin + Vector3.FORWARD * 0.2)
 				anim.stop()
 				anim.play(FIRE_ANIM[current_weapon])
-	
 				
 			audio[current_weapon].play()
 			audio[current_weapon].pitch_scale = float(magazine_ammo[current_weapon]) / MAX_MAG_AMMO[current_weapon] + 0.4
@@ -1636,6 +1553,7 @@ func zippy()->void :
 			magazine_ammo[current_weapon] -= 1
 			audio[current_weapon].play()
 			glob.player.damage(5, Vector3.ZERO, global_transform.origin, global_transform.origin)
+
 func pistol()->void :
 	if timer.is_stopped():
 		var rayrot = raycast.rotation
@@ -1652,16 +1570,11 @@ func pistol()->void :
 			if player and glob.implants.arm_implant.ricochet:
 				ricochet(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 			decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
-
-
-
-
-
-
 			do_damage(collider)
 		if player:
 			get_parent().rotation.x -= 0.01
 			timer.start(0.07)
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.scale = Vector3(rand_range(0.1, 0.1), rand_range(0.1, 0.1), rand_range(0.1, 0.1))
 		else :
@@ -1697,16 +1610,11 @@ func vag72()->void :
 			if player and glob.implants.arm_implant.ricochet:
 				ricochet(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 			decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
-
-
-
-
-
-
 			do_damage(collider)
 		if player:
 			get_parent().rotation.x -= 0.01
 			timer.start(0.07)
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.scale = Vector3(rand_range(1, 1), rand_range(1, 1), rand_range(1, 1))
 		else :
@@ -1730,23 +1638,14 @@ func sks()->void :
 	if timer.is_stopped():
 		var rayrot = raycast.rotation
 		rayrot = Vector3(rand_range( - (recoil + leaning_modifier), recoil + leaning_modifier), rand_range( - (recoil + leaning_modifier), recoil + leaning_modifier), raycast_init_rot.z)
-		raycast.rotation = rayrot
-		
-			
-			
-			
+		raycast.rotation = rayrot	
 		raycast.force_raycast_update()
+
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
 			if player and glob.implants.arm_implant.ricochet:
 				ricochet(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 			decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
-
-
-
-
-
-
 			var dmg = 0
 			if Global.STOCKS.total_assets < 100:
 				dmg = 1
@@ -1767,6 +1666,7 @@ func sks()->void :
 		if player:
 			get_parent().rotation.x -= 0.01
 			timer.start(0.07)
+			muzzle_flash_on = true
 			player_muzzle_flash.show()
 			player_muzzle_flash.scale = Vector3(rand_range(1, 1), rand_range(1, 1), rand_range(1, 1))
 		else :
@@ -1781,7 +1681,6 @@ func sks()->void :
 			anim.stop()
 			anim.play(FIRE_ANIM[current_weapon])
 			magazine_ammo[current_weapon] -= 1
-
 			
 		$SKS_Sound.play()
 		
@@ -1804,11 +1703,6 @@ func skullgun_internal():
 			var collider = raycast.get_collider()
 			decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 
-
-
-
-
-
 			var new_explosion = explosion.instance()
 			glob.player.get_parent().add_child(new_explosion)
 			new_explosion.global_transform.origin = raycast.get_collision_point()
@@ -1818,9 +1712,7 @@ func skullgun_internal():
 			get_parent().rotation.x -= 0.04
 			muzzle_light.light_energy = 1
 			glob.player.reticle.shoot()
-			
-			
-			
+
 		audio[0].play()
 		
 
@@ -1861,13 +1753,12 @@ func nambu()->void :
 		audio[current_weapon].play()
 		audio[current_weapon].pitch_scale = float(magazine_ammo[current_weapon]) / MAX_MAG_AMMO[current_weapon] + 0.4
 		
-		
-	
 func nambu_fire():
 		if current_weapon != W_NAMBU:
 			return 
 		$OmniLight.light_energy = 1
 		glob.player.reticle.shoot()
+		muzzle_flash_on = true
 		player_muzzle_flash.show()
 		player_muzzle_flash.scale = Vector3(2, 2, 2)
 		for body in alert.get_overlapping_bodies():
@@ -1978,9 +1869,6 @@ func sniper()->void :
 			yield (get_tree().create_timer(0.9), "timeout")
 		
 			spawn_shell(SHELLS[current_weapon], 1, 10, get_parent().get_parent().transform.basis.xform(Vector3(5, - 10, 0).normalized()), $Player_Weapon / ShellPosition.global_transform.origin)
-		
-	
-	
 
 func mauser()->void :
 	if not player:
@@ -2001,15 +1889,6 @@ func mauser()->void :
 				shoot_through(collider, raycast.get_collision_point())
 				decal(collider, raycast.get_collision_point(), raycast.get_collision_normal())
 				do_damage(collider)
-				
-			
-				
-				
-				
-					
-					
-					
-					
 		else :
 			if raycast.is_colliding():
 				var collider = raycast.get_collider()
@@ -2117,98 +1996,97 @@ func autoshotgun()->void :
 			glob.player.reticle.shoot()
 		if player:
 			spawn_shell(SHELLS[current_weapon], 1, 10, get_parent().get_parent().transform.basis.xform(Vector3(5, - 10, 0).normalized()), $Player_Weapon / ShellPosition.global_transform.origin)
-		
-	
-
 
 func rocket_launcher()->void :
-		if timer.is_stopped():
-			var missile_new = BULLETS.instance()
-			if player:
-				get_parent().get_parent().get_parent().add_child(missile_new)
-			else :
-				get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
-			missile_new.global_transform.origin = global_transform.origin
+	if timer.is_stopped():
+		var missile_new = BULLETS.instance()
+		if player:
+			get_parent().get_parent().get_parent().add_child(missile_new)
+		else :
+			get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
+		missile_new.global_transform.origin = global_transform.origin
 
-			missile_new.velocity = (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * - 30
-			timer.start(0.7)
-			magazine_ammo[current_weapon] -= 1
-			if player:
-				anim.stop()
-				anim.play(FIRE_ANIM[current_weapon])
-				audio[current_weapon].play()
-				glob.player.reticle.shoot()
-			else :
-				missile_new.set_collision_mask_bit(2, 0)
-				missile_new.set_collision_mask_bit(1, 1)
+		missile_new.velocity = (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * - 30
+		timer.start(0.7)
+		magazine_ammo[current_weapon] -= 1
+		if player:
+			anim.stop()
+			anim.play(FIRE_ANIM[current_weapon])
+			audio[current_weapon].play()
+			glob.player.reticle.shoot()
+		else :
+			missile_new.set_collision_mask_bit(2, 0)
+			missile_new.set_collision_mask_bit(1, 1)
 
 func light()->void :
-		if timer.is_stopped():
-			var missile_new = LIGHT_BULLET.instance()
-			if player:
-				add_child(missile_new)
-				missile_new.set_as_toplevel(true)
-			else :
-				get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
-			missile_new.global_transform.origin = $Player_Weapon / LIGHT / Position3D.global_transform.origin
+	if timer.is_stopped():
+		var missile_new = LIGHT_BULLET.instance()
+		if player:
+			add_child(missile_new)
+			missile_new.set_as_toplevel(true)
+		else :
+			get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
+		missile_new.global_transform.origin = $Player_Weapon / LIGHT / Position3D.global_transform.origin
 
-			missile_new.velocity = ($Player_Weapon / LIGHT / Position3D.global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * - 60
-			timer.start(0.1)
-			magazine_ammo[current_weapon] -= 1
-			if player:
-				anim.stop()
-				anim.play(FIRE_ANIM[current_weapon])
-				audio[current_weapon].play()
-				glob.player.reticle.shoot()
-				get_parent().rotation.x -= rand_range(0, 0.03)
-				player_weapon.rotation.z = 0 + rand_range( - 0.1, 0.1)
-			else :
-				missile_new.set_collision_mask_bit(2, 0)
-				missile_new.set_collision_mask_bit(1, 1)
+		missile_new.velocity = ($Player_Weapon / LIGHT / Position3D.global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * - 60
+		timer.start(0.1)
+		magazine_ammo[current_weapon] -= 1
+		if player:
+			anim.stop()
+			anim.play(FIRE_ANIM[current_weapon])
+			audio[current_weapon].play()
+			glob.player.reticle.shoot()
+			get_parent().rotation.x -= rand_range(0, 0.03)
+			player_weapon.rotation.z = 0 + rand_range( - 0.1, 0.1)
+		else :
+			missile_new.set_collision_mask_bit(2, 0)
+			missile_new.set_collision_mask_bit(1, 1)
 
 func gas()->void :
-		if timer.is_stopped():
-			var missile_new = GAS_GRENADE.instance()
-			if player:
-				zoom_flag = false
-				get_parent().get_parent().get_parent().add_child(missile_new)
-			else :
-				get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
-			if player:
-				missile_new.set_collision_mask_bit(1, 0)
-			else :
-				missile_new.set_collision_mask_bit(1, 1)
-				missile_new.set_collision_mask_bit(2, 0)
-			missile_new.global_transform.origin = global_transform.origin
-			missile_new.add_collision_exception_with(get_parent().get_parent())
-			missile_new.set_velocity(60, (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized(), global_transform.origin)
-			timer.start(3)
-			
-			audio[current_weapon].play()
-			if player:
-				magazine_ammo[current_weapon] -= 1
-				anim.stop()
-				anim.play(FIRE_ANIM[current_weapon])
-				
-				glob.player.reticle.shoot()
-func flamethrower():
-		if timer.is_stopped():
-			timer.start(0.025)
+	if timer.is_stopped():
+		var missile_new = GAS_GRENADE.instance()
+		if player:
+			zoom_flag = false
+			get_parent().get_parent().get_parent().add_child(missile_new)
+		else :
+			get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
+		if player:
+			missile_new.set_collision_mask_bit(1, 0)
+		else :
+			missile_new.set_collision_mask_bit(1, 1)
+			missile_new.set_collision_mask_bit(2, 0)
+		missile_new.global_transform.origin = global_transform.origin
+		missile_new.add_collision_exception_with(get_parent().get_parent())
+		missile_new.set_velocity(60, (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized(), global_transform.origin)
+		timer.start(3)
+		
+		audio[current_weapon].play()
+		if player:
 			magazine_ammo[current_weapon] -= 1
-			var missile_new = FIRE.instance()
-			if player:
-				get_parent().get_parent().get_parent().add_child(missile_new)
-			else :
-				get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
-			if player:
-				missile_new.set_collision_mask_bit(1, 0)
-			else :
-				missile_new.set_collision_mask_bit(1, 1)
-				missile_new.set_collision_mask_bit(2, 0)
-			missile_new.global_transform.origin = player_muzzle_flash.global_transform.origin
+			anim.stop()
+			anim.play(FIRE_ANIM[current_weapon])
 			
-			missile_new.velocity = - (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * 40
-			missile_new.velocity += Global.player.player_velocity
+			glob.player.reticle.shoot()
+
+func flamethrower():
+	if timer.is_stopped():
+		timer.start(0.025)
+		magazine_ammo[current_weapon] -= 1
+		var missile_new = FIRE.instance()
+		if player:
+			get_parent().get_parent().get_parent().add_child(missile_new)
+		else :
+			get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
+		if player:
+			missile_new.set_collision_mask_bit(1, 0)
+		else :
+			missile_new.set_collision_mask_bit(1, 1)
+			missile_new.set_collision_mask_bit(2, 0)
+		missile_new.global_transform.origin = player_muzzle_flash.global_transform.origin
+		
+		missile_new.velocity = - (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized() * 40
+		missile_new.velocity += Global.player.player_velocity
+
 func bore()->void :
 		if timer.is_stopped():
 			var missile_new = BORE.instance()
@@ -2224,6 +2102,7 @@ func bore()->void :
 			anim.play(FIRE_ANIM[current_weapon])
 			audio[current_weapon].play()
 			glob.player.reticle.shoot()
+
 func radiator()->void :
 	audio[current_weapon].pitch_scale = clamp(cylinder_velocity * 10 + 0.01, 2.0, 4)
 	if not audio[current_weapon].playing:
@@ -2246,31 +2125,31 @@ func radiator()->void :
 		for b in $Radiation_Area.get_overlapping_bodies():
 			if b.has_method("damage"):
 				b.damage(50, (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized(), b.global_transform.origin, global_transform.origin)
+
 func tranq()->void :
-	if timer.is_stopped():
+	if timer.is_stopped():			
+		var missile_new = TRANQ_DART.instance()
+		DART_mesh.get_node("Particles").emitting = true
+		if player:
+			get_parent().get_parent().get_parent().add_child(missile_new)
+		else :
+			get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
+		if player:
+			missile_new.set_collision_mask_bit(1, 0)
+		else :
+			missile_new.set_collision_mask_bit(1, 1)
+			missile_new.set_collision_mask_bit(2, 0)
+		missile_new.global_transform.origin = global_transform.origin
+		missile_new.set_velocity(90, (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized(), global_transform.origin)
+		
+		
+		audio[current_weapon].play()
+		if player:
+			magazine_ammo[current_weapon] -= 1
+			anim.stop()
+			anim.play(FIRE_ANIM[current_weapon])
 			
-			var missile_new = TRANQ_DART.instance()
-			DART_mesh.get_node("Particles").emitting = true
-			if player:
-				get_parent().get_parent().get_parent().add_child(missile_new)
-			else :
-				get_parent().get_parent().get_parent().get_parent().add_child(missile_new)
-			if player:
-				missile_new.set_collision_mask_bit(1, 0)
-			else :
-				missile_new.set_collision_mask_bit(1, 1)
-				missile_new.set_collision_mask_bit(2, 0)
-			missile_new.global_transform.origin = global_transform.origin
-			missile_new.set_velocity(90, (global_transform.origin - $Front_Pos_Helper.global_transform.origin).normalized(), global_transform.origin)
-			
-			
-			audio[current_weapon].play()
-			if player:
-				magazine_ammo[current_weapon] -= 1
-				anim.stop()
-				anim.play(FIRE_ANIM[current_weapon])
-				
-				glob.player.reticle.shoot()
+			glob.player.reticle.shoot()
 	
 
 func align_up(node_basis, normal)->Basis:
@@ -2297,10 +2176,9 @@ func AI_shoot()->void :
 			recoil = 0
 			glob.action_lerp_value += 1
 		shoot()
+
 func alt_fire()->void :
 	if player:
-		
-			
 		zoom()
 
 func zoom():
@@ -2480,10 +2358,7 @@ func set_UI_ammo():
 		UI.set_ammo(ammo[current_weapon], magazine_ammo[current_weapon], MAX_MAG_AMMO[current_weapon], MAX_AMMO[current_weapon])
 
 func set_weapon(weapon_index):
-	
-	
 	if player and not orb:
-		
 		anim.stop()
 		if current_weapon == weapon1:
 			weapon1 = weapon_index
@@ -2495,17 +2370,9 @@ func set_weapon(weapon_index):
 		glob.player.set_move_speed()
 
 func add_ammo(amount:int, type:int, ammobox:Spatial):
-
 	ammo[type] += amount
-
-
-
 	if amount > 0:
 		UI.notify("(" + str(amount) + ") " + W_NAMES[type] + " ammo received", Color(0, 1, 1))
-
-
-
-
 	if current_weapon != null:
 		UI.set_ammo(ammo[current_weapon], magazine_ammo[current_weapon], MAX_MAG_AMMO[current_weapon], MAX_AMMO[current_weapon])
 

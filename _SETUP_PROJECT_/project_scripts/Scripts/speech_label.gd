@@ -1,46 +1,41 @@
 extends Label
 
-
 var speech_break = false
 var mouse_hover = false
 var speech_flag = false
-var alpha_sound = [preload("res://Sfx/Voice/A.wav"), 
-preload("res://Sfx/Voice/B.wav"), 
-preload("res://Sfx/Voice/C.wav"), 
-preload("res://Sfx/Voice/D.wav"), 
-preload("res://Sfx/Voice/E.wav"), 
-preload("res://Sfx/Voice/F.wav"), 
-preload("res://Sfx/Voice/G.wav"), 
-preload("res://Sfx/Voice/H.wav"), 
-preload("res://Sfx/Voice/I.wav"), 
-preload("res://Sfx/Voice/J.wav"), 
-preload("res://Sfx/Voice/K.wav"), 
-preload("res://Sfx/Voice/L.wav"), 
-preload("res://Sfx/Voice/M.wav"), 
-preload("res://Sfx/Voice/N.wav"), 
-preload("res://Sfx/Voice/O.wav"), 
-preload("res://Sfx/Voice/P.wav"), 
-preload("res://Sfx/Voice/Q.wav"), 
-preload("res://Sfx/Voice/R.wav"), 
-preload("res://Sfx/Voice/S.wav"), 
-preload("res://Sfx/Voice/T.wav"), 
-preload("res://Sfx/Voice/U.wav"), 
-preload("res://Sfx/Voice/V.wav"), 
-preload("res://Sfx/Voice/W.wav"), 
-preload("res://Sfx/Voice/X.wav"), 
-preload("res://Sfx/Voice/Y.wav"), 
-preload("res://Sfx/Voice/Z.wav")]
-signal character_speak
-func _ready():
-	
-		
-	
-		
-	
-	pass
-	
+var alpha_sound = [
+	preload("res://Sfx/Voice/A.wav"), 
+	preload("res://Sfx/Voice/B.wav"), 
+	preload("res://Sfx/Voice/C.wav"), 
+	preload("res://Sfx/Voice/D.wav"), 
+	preload("res://Sfx/Voice/E.wav"), 
+	preload("res://Sfx/Voice/F.wav"), 
+	preload("res://Sfx/Voice/G.wav"), 
+	preload("res://Sfx/Voice/H.wav"), 
+	preload("res://Sfx/Voice/I.wav"), 
+	preload("res://Sfx/Voice/J.wav"), 
+	preload("res://Sfx/Voice/K.wav"), 
+	preload("res://Sfx/Voice/L.wav"), 
+	preload("res://Sfx/Voice/M.wav"), 
+	preload("res://Sfx/Voice/N.wav"), 
+	preload("res://Sfx/Voice/O.wav"), 
+	preload("res://Sfx/Voice/P.wav"), 
+	preload("res://Sfx/Voice/Q.wav"), 
+	preload("res://Sfx/Voice/R.wav"), 
+	preload("res://Sfx/Voice/S.wav"), 
+	preload("res://Sfx/Voice/T.wav"), 
+	preload("res://Sfx/Voice/U.wav"), 
+	preload("res://Sfx/Voice/V.wav"), 
+	preload("res://Sfx/Voice/W.wav"), 
+	preload("res://Sfx/Voice/X.wav"), 
+	preload("res://Sfx/Voice/Y.wav"), 
+	preload("res://Sfx/Voice/Z.wav")
+]
 
-		
+signal character_speak
+
+func _ready():
+	pass
 
 func list_files_in_directory(path:String, file_type:String)->Array:
 	var files = []
@@ -52,7 +47,6 @@ func list_files_in_directory(path:String, file_type:String)->Array:
 		if file == "":
 			break
 		elif not file.begins_with(".") and file.get_extension() == file_type:
-
 			files.append(path + "/" + file)
 	return files
 
@@ -95,7 +89,6 @@ func speech():
 		
 		for i in range(3):
 			yield (get_tree(), "idle_frame")
-
 
 func _on_Description_mouse_entered():
 	mouse_hover = true

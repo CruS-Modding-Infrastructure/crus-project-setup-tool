@@ -1,29 +1,25 @@
 extends Spatial
 
-
-
-
-
-export  var npc_name = "Generic_NPC"
-export  var health = 100
-export  var armor = 0
-export  var armored = false
-export  var random_spawn = false
-export  var flee_health = 25
-export  var gib_health = - 50
-export  var civilian = false
-export  var permadeath = false
-export  var psychosis_inducer = false
-export  var stupid = false
-export  var creature = false
-export  var objective = false
-export  var chaos_objective = false
-export  var gib = true
-export  var notarget = false
-export  var edible = true
-export  var hell_objective = false
-export  var cancer_immunity = false
-export  var stealth = false
+export var npc_name = "Generic_NPC"
+export var health = 100
+export var armor = 0
+export var armored = false
+export var random_spawn = false
+export var flee_health = 25
+export var gib_health = - 50
+export var civilian = false
+export var permadeath = false
+export var psychosis_inducer = false
+export var stupid = false
+export var creature = false
+export var objective = false
+export var chaos_objective = false
+export var gib = true
+export var notarget = false
+export var edible = true
+export var hell_objective = false
+export var cancer_immunity = false
+export var stealth = false
 var immortal = false
 var t = 0
 var body
@@ -37,7 +33,7 @@ var head
 var head_mesh
 var legs
 var leg_mesh
-onready  var colliders = $Collisions
+onready var colliders = $Collisions
 var weapon
 var weapon_drop = preload("res://Entities/Objects/Gun_Pickup.tscn")
 var grilled_material = preload("res://Materials/grilled.tres")
@@ -47,8 +43,8 @@ var on_fire = false
 var player_seen = false
 var rand_objective = false
 var alert_sphere = preload("res://Entities/Alert_Sphere.tscn")
-onready  var pain_sfx = [$Body / SFX / Pain1]
-onready  var gib_sfx = $Body / SFX / Gib
+onready var pain_sfx = [$Body / SFX / Pain1]
+onready var gib_sfx = $Body / SFX / Gib
 
 var gibs_spawned = false
 var glob
@@ -59,7 +55,7 @@ var stealthmat = preload("res://Materials/stealth_enemy.tres")
 var SELF_DESTRUCT = preload("res://Entities/Bullets/Poison_Gas.tscn")
 var HEARTBEAT_INDICATOR = preload("res://Entities/Enemies/Heartbeat_Indicator.tscn")
 var heartbeat
-export  var poison_death:bool = false
+export var poison_death:bool = false
 export (Array, PackedScene) var GIBS = [preload("res://Entities/Physics_Objects/Chest_Gib.tscn"), 
 preload("res://Entities/Physics_Objects/Leg_Gib.tscn"), 
 preload("res://Entities/Physics_Objects/Leg_Gib.tscn"), 
@@ -76,7 +72,8 @@ export (Array, PackedScene) var DROPS = [
 	preload("res://Entities/Physics_Objects/ORG_Kidney.tscn"), 
 	preload("res://Entities/Physics_Objects/ORG_Appendix.tscn"), 
 	preload("res://Entities/Physics_Objects/ORG_Spine.tscn"), 
-	]
+]
+
 export (Array, float) var DROP_CHANCE = [
 	50, 
 	15, 
@@ -107,7 +104,7 @@ var armored_material = preload("res://Materials/rod.tres")
 var healthy_random = false
 var armored_random = false
 var nodamage
-onready  var collisions = $Collisions
+onready var collisions = $Collisions
 
 var bodypos
 var nearby:Array
@@ -115,15 +112,15 @@ var deathtimer:Timer
 var tranqtimer:Timer
 var poisontimer:Timer
 var fireaudio:AudioStreamPlayer3D
+
 func cleanup():
 	queue_free()
 
-	
-		
 func set_stealth():
 	if not stealth:
 		return 
 	skeleton.get_node("Armature/Skeleton/Cube").material_override = stealthmat
+
 func _ready():
 	nodamage = get_node_or_null("Body/SFX/NoDamage")
 	if nodamage == null:
@@ -133,6 +130,7 @@ func _ready():
 		nodamage.unit_size = 10
 	set_process(false)
 	glob = Global
+	
 	if hell_objective and not glob.hope_discarded:
 		queue_free()
 		return 
@@ -142,9 +140,11 @@ func _ready():
 	if (chaos_objective and not glob.chaos_mode):
 		queue_free()
 		return 
+	
 	if chaos_objective and rand_range(0, 100) > 25:
 		queue_free()
 		return 
+	
 	if glob.chaos_mode:
 		if rand_range(0, 100) < 10:
 			stealth_random = true
@@ -156,10 +156,10 @@ func _ready():
 			healthy_random = true
 		if rand_range(0, 100) < 10:
 			armored_random = true
+	
 	if not civilian and glob.hope_discarded:
 		if health < 70 and health > 20:
-			health = 70
-			
+			health = 70		
 
 	if glob.DEAD_CIVS.find(npc_name) != - 1:
 		queue_free()
@@ -236,7 +236,7 @@ func _ready():
 			armor = 50
 		if stealth_random:
 			torso_mesh.material_override = stealthmat
-
+	
 	if not creature:
 		head_mesh = $Nemesis / Armature / Skeleton / Head_Mesh
 		if stealth_random:
@@ -246,79 +246,32 @@ func _ready():
 	body.add_child(skeleton)
 	remove_child(colliders)
 	body.add_child(colliders)
-		
-	
-	
-	
-	
-
-
-
-
 	if glob.implants.head_implant.sensor:
 		var new_heartbeat = HEARTBEAT_INDICATOR.instance()
 		body.add_child(new_heartbeat)
 		new_heartbeat.global_transform.origin = body.global_transform.origin + Vector3.UP * 0.25
 		heartbeat = new_heartbeat
-	
+
 func _physics_process(delta):
 	if on_fire:
 		var dist_clamped = clamp(body.global_transform.origin.distance_to(glob.player.global_transform.origin), 0.1, 20)
 		pain_sfx[0].pitch_scale = 0.5 + ((dist_clamped - 0.1) / (20 - 0.1))
 	t += 1
-	
-	
-	
-		
-		
-		
 
-
-
-
-
-
-
-
-	
-	
-	
-	
-		
-		
-		
-	
-		
-		
-		
-		
-			
-
-		
-		
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
 func set_tranquilized(dart):
 	tranqtimer.start()
 
 func tranq_timeout(dart):
 	if armored or poison_death:
 		return 
+	
 	if not civilian and body.get("player_spotted"):
 		if not dart and (body.player_spotted or body.line_of_sight > 0):
 			return 
+	
 	if dead:
 		return 
+	
 	if body.has_method("set_tranquilized"):
 		body.set_tranquilized()
 		body.set_collision_layer_bit(4, false)
@@ -333,23 +286,12 @@ func add_velocity(amount, normal):
 
 func piercing_damage(damage, collision_n, collision_p):
 	if not dead and armor > 0:
-
-
-
-
-
-
-
-
-
 		for body in new_alert_sphere.get_overlapping_bodies():
 			if body.has_method("alert"):
 				body.alert(glob.player.global_transform.origin)
 		pain_sfx[0].play()
 	
 	armor -= damage
-	
-
 	
 	if health <= flee_health and damage > 0.5:
 		body.set_flee()
@@ -358,12 +300,10 @@ func piercing_damage(damage, collision_n, collision_p):
 		if not dead:
 			die(damage, collision_n, collision_p)
 			
-		
+	
 	if health <= gib_health and not gibs_spawned and gib:
 		gibs_spawned = true
 		gib_sfx.play()
-		
-		
 		
 		for gib in GIBS:
 			if head.get_head_health() > 0 and gib == G_HEAD:
@@ -371,16 +311,17 @@ func piercing_damage(damage, collision_n, collision_p):
 			elif gib != G_HEAD:
 				spawn_gib(gib, 1, damage, collision_n, collision_p)
 		
-		
-			
 		skeleton.hide()
 		colliders.get_node("Dead_Head/CollisionShape").disabled = true
 		colliders.get_node("Dead_Body/CollisionShape").disabled = true
 		deathtimer.start()
+
 func alert_body_entered(b):
 	nearby.append(b)
+
 func alert_body_exited(b):
 	nearby.remove(nearby.find(b))
+
 func damage(damage, collision_n, collision_p, shooter_pos):
 	if on_fire and not grilled_flag:
 		if head_mesh:
@@ -389,9 +330,9 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 			torso_mesh.material_override = grilled_material
 		grilled_flag = true
 	
-		
 	if health > 199 and civilian:
 		glob.player.UI.message("Stop that!", true)
+	
 	if armor > 0:
 		if nodamage != null:
 			nodamage.pitch_scale = 1.2 + rand_range(0, 0.2)
@@ -400,16 +341,8 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 			if body.has_method("alert"):
 				body.alert(glob.player.global_transform.origin)
 		return 
+	
 	if not dead and damage > 0.5:
-
-
-
-
-
-
-
-
-
 		if not alerted:
 			for body in new_alert_sphere.get_overlapping_bodies():
 				if body.has_method("alert"):
@@ -418,19 +351,19 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 			
 		if not pain_sfx[0].playing:
 			pain_sfx[0].play()
+	
 	if damage > 0.5:
 		body.add_velocity(collision_n * damage * 0.2)
 	health -= damage
 	
-
-	
 	if health <= flee_health and damage > 0.5:
 		body.set_flee()
 		flee = true
+	
 	if health <= 0:
 		if not dead:
 			die(damage, collision_n, collision_p)
-		
+	
 	if health <= gib_health and not gibs_spawned and gib and damage != 20.6:
 		gibs_spawned = true
 		gib_sfx.play()
@@ -442,8 +375,6 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 					spawn_gib(DROPS[i], 1, damage, collision_n, collision_p)
 				i += 1
 		
-		
-		
 		for gib in GIBS:
 			if head.get_head_health() > 0 and gib == G_HEAD:
 				spawn_gib(gib, 1, damage, collision_n, collision_p)
@@ -453,18 +384,7 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 		colliders.get_node("Dead_Head/CollisionShape").disabled = true
 		colliders.get_node("Dead_Body/CollisionShape").disabled = true
 		deathtimer.start()
-		
-		
 
-
-
-
-
-
-
-	
-
-	
 func remove_objective():
 		if dead:
 			return 
@@ -475,7 +395,7 @@ func remove_objective():
 			glob.enemy_count -= 1
 		else :
 			glob.civ_count -= 1
-	
+
 func spawn_gib(gib, count, damage, collision_n, collision_p):
 	if not gib:
 		return 
@@ -488,10 +408,7 @@ func spawn_gib(gib, count, damage, collision_n, collision_p):
 			new_gib.velocity = (damage + rand_range(0, 10)) * - collision_n
 		elif "body" in new_gib:
 			new_gib.body.velocity = (damage + rand_range(0, 10)) * - collision_n
-		
-	
-			
-	
+
 func remove_weapon():
 	if not civilian and "current_weapon" in weapon and not armored and health < 10000:
 		if weapon.disabled:
@@ -508,7 +425,7 @@ func remove_weapon():
 		new_weapon_drop.gun.current_weapon = weapon.current_weapon
 		new_weapon_drop.gun.ammo = weapon.MAX_MAG_AMMO[weapon.current_weapon]
 		new_weapon_drop.gun.MESH[weapon.current_weapon].show()
-	
+
 func die(damage, collision_n, collision_p):
 	if not dead:
 		if on_fire:
@@ -565,35 +482,24 @@ func die(damage, collision_n, collision_p):
 			
 		if not civilian and not creature:
 			glob.player.local_money += 10
+
 func poison_timeout():
 	var new_misery = SELF_DESTRUCT.instance()
 	add_child(new_misery)
 	new_misery.global_transform.origin = body.global_transform.origin
 	damage(500, Vector3.ZERO, body.global_transform.origin, Vector3.ZERO)
+
 func align_up(node_basis, normal):
 	var result = Basis()
-	
-
 	result.x = normal.cross(node_basis.y) + Vector3(1e-05, 0, 0)
-	
 	result.z = node_basis.x.cross(normal) + Vector3(0, 0, 1e-05)
-	
 	result = result.orthonormalized()
-	
-	
 	result.z *= scale.z
-
 	return result
 
 func set_player_seen(sight):
 	if objective:
 		player_seen = sight
-
-
-
-
-
-
 
 func grapple(pos3d:Position3D):
 	if not dead:
@@ -602,5 +508,3 @@ func grapple(pos3d:Position3D):
 	var distance = body.global_transform.origin.distance_to(point)
 	if distance > 3:
 		body.velocity -= (body.global_transform.origin - point).normalized() * 22 * get_physics_process_delta_time()
-
-	

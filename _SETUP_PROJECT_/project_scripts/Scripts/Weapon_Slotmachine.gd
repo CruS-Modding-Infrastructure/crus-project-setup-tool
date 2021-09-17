@@ -41,7 +41,6 @@ func _physics_process(delta):
 
 
 func spawn_item():
-	
 	var new_weapon_drop = weapon_drop.instance()
 	get_parent().add_child(new_weapon_drop)
 	new_weapon_drop.gun.MESH[new_weapon_drop.gun.current_weapon].hide()
@@ -50,6 +49,7 @@ func spawn_item():
 	new_weapon_drop.gun.MESH[new_weapon_drop.gun.current_weapon].show()
 	new_weapon_drop.global_transform.origin = $Position3D.global_transform.origin
 	new_weapon_drop.damage(5, (global_transform.origin - ($Forward_Position.global_transform.origin + Vector3(rand_range( - 0.1, 0.1), rand_range( - 0.1, 0.1), rand_range( - 0.1, 0.1)))).normalized(), global_transform.origin, Vector3.ZERO)
+
 func player_use():
 	if rotation_counter >= 0:
 		return 

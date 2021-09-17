@@ -1,22 +1,12 @@
 extends Spatial
 
-
-
-
-
 export  var level_index = 13
 export  var level_name = "Darkworld"
-
 
 func _ready():
 	var new_mat = $level_painting / Cube.mesh.surface_get_material(1).duplicate()
 	new_mat.albedo_texture = Global.LEVEL_IMAGES[level_index]
 	$level_painting / Cube.set_surface_material(1, new_mat)
-
-
-
-
-
 
 func _on_Area_body_entered(body):
 	if body == Global.player:

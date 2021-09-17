@@ -1,8 +1,5 @@
 extends KinematicBody
 
-
-
-
 var rotation_helper
 var player_ray
 var velocity_ray
@@ -12,22 +9,18 @@ var anim_player
 var anim_tree
 const DEATH_ANIMS = ["Death1", "Death2"]
 
-
 var player
 var player_spotted = false
 var player_last_seen
 var last_seen_n
 var time = 0
 var dead = false
-
 var rotate_towards = 0
 
 export  var gravity = 22
 export  var friction = 6
-
 export  var run_speed = 4.5
 export  var walk_speed = 2
-
 export  var move_speed = 2
 export  var run_acceleration = 100
 export  var run_deacceleration = 10
@@ -37,6 +30,7 @@ export  var air_control = 2
 export  var side_strafe_acceleration = 0.06
 export  var side_strafe_speed = 0.06
 export  var jump_speed = 7
+
 var hold_jump_to_bhop = false
 
 var move_direction = Vector3(0, 0, 0)
@@ -49,14 +43,15 @@ var flee = false
 var stop_moving = false
 var reaction_timer = 0
 var enemy_friction = 0
-onready  var soul = get_parent()
+onready var soul = get_parent()
 
 class Cmd:
 	var forward_move:float
 	var right_move:float
 	var up_move:float
-var initrotx
+
 var cmd
+var initrotx
 
 var path
 var navigation
@@ -82,7 +77,7 @@ func _ready():
 	anim_player = get_parent().get_node("Nemesis/AnimationPlayer")
 	path = navigation.get_simple_path(global_transform.origin, global_transform.origin)
 	anim_player.play("Idle")
-	
+
 func _physics_process(delta):
 		if global_transform.origin.distance_to(player.global_transform.origin) > 100:
 			return 
@@ -117,8 +112,7 @@ func _physics_process(delta):
 					soul.set_player_seen(true)
 					in_sight = true
 					rotation_helper.look_at(player.global_transform.origin + Vector3(0, 2, 0), Vector3.UP)
-					
-
+			
 			if player_ray.get_collider() != player:
 				in_sight = false
 				soul.set_player_seen(false)
@@ -144,50 +138,6 @@ func _physics_process(delta):
 				enemy_velocity.x *= 0.95
 				enemy_velocity.z *= 0.95
 		move_and_slide(enemy_velocity, Vector3(0, 1, 0), 0.05, 4, deg2rad(45))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 func set_animation(anim, speed):
 	anim_player.play(anim)
@@ -225,8 +175,6 @@ func behaviour(delta):
 	else :
 		cmd.right_move = 0
 		cmd.forward_move = 0
-
-		
 
 func alert(pos):
 	if player_spotted and flee:
@@ -286,9 +234,7 @@ func air_move(delta):
 	accelerate(wishdir, wishspeed, accel, delta)
 	if air_control:
 		air_control(wishdir, wishspeed, delta)
-	
-	
-	
+
 func air_control(wishdir, wishspeed, delta):
 	var zspeed
 	var speed
@@ -298,6 +244,7 @@ func air_control(wishdir, wishspeed, delta):
 	
 	if cmd.forward_move == 0 or wishspeed == 0:
 		return 
+	
 	zspeed = enemy_velocity.y
 	enemy_velocity.y = 0
 	
@@ -323,7 +270,6 @@ func air_control(wishdir, wishspeed, delta):
 func ground_move(delta):
 	var wishdir
 	
-	
 	if not wish_jump:
 		apply_friction(1.0, delta)
 	else :
@@ -346,7 +292,6 @@ func ground_move(delta):
 	if (wish_jump):
 		enemy_velocity.y = jump_speed
 		wish_jump = false
-	
 
 func apply_friction(t, delta):
 	var vec = enemy_velocity
@@ -408,7 +353,6 @@ func add_velocity(velocity):
 	enemy_velocity -= velocity
 	move_speed = run_speed
 	flee = true
-	
 
 func get_direction():
 	return Vector3(cmd.right_move, 0, cmd.forward_move)

@@ -1,9 +1,5 @@
 extends DirectionalLight
 
-
-
-
-
 var t = 0
 var time = 12
 onready  var env:WorldEnvironment = get_parent().get_node("WorldEnvironment")

@@ -1,7 +1,7 @@
 extends KinematicBody
 
-export  var door_health = 100
-export  var speed = 2
+export var door_health = 100
+export var speed = 2
 var open = false
 var stop = true
 var initrot = rotation
@@ -36,11 +36,6 @@ func _ready():
 	mesh_instance.transform = t
 	collision_shape.transform = t
 
-
-
-
-		
-
 func _physics_process(delta):
 	if not open and not stop:
 		if not audio_player.playing:
@@ -53,6 +48,7 @@ func _physics_process(delta):
 			translation.z += speed * delta
 			translation.x += speed * delta
 		movement_counter += speed * delta
+	
 	if open and not stop:
 		if not audio_player.playing:
 			audio_player.play()
@@ -64,23 +60,18 @@ func _physics_process(delta):
 			translation.z -= speed * delta
 			translation.x -= speed * delta
 		movement_counter += speed * delta
+	
 	if movement_counter > mesh_instance.get_aabb().size.x + 0.1 and movement_counter > mesh_instance.get_aabb().size.z + 0.1:
 		audio_player.stop()
 		movement_counter = 0
 		stop = true
 
-
-
-
-
-
 func timeout():
 	stop = not stop
 	open = not open
+
 func use():
 	if stop and not open:
 		open = not open
 		stop = not stop
 		timer.start()
-
-

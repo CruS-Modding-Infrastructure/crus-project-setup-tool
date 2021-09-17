@@ -1,9 +1,5 @@
 extends Spatial
 
-
-
-
-
 var t = 0
 onready  var torus = $"Armature/Skeleton/BoneAttachment 2/Torus"
 onready  var head = $Armature / Skeleton / BoneAttachment / Head
@@ -16,14 +12,12 @@ var enemy_spawn_frequency = 200
 var kill_flag = false
 var activated = false
 
-
 func _ready():
 	Global.objectives += 1
 
-
-
 func _process(delta):
 	torus.rotate_object_local(Vector3.BACK, deg2rad(1))
+
 func _physics_process(delta):
 	t += 1
 	if not activated and fmod(t, 20) == 0:
@@ -61,6 +55,7 @@ func _physics_process(delta):
 	elif fmod(t, 150) == 0:
 		if is_instance_valid(rocket):
 			rocket.disabled = not rocket.disabled
+	
 	if fmod(t, enemy_spawn_frequency) == 0:
 		if head.destroyed:
 			return 

@@ -1,9 +1,5 @@
 extends Spatial
 
-
-
-
-
 export  var next_scene = ""
 export (Array, String, MULTILINE) var LINES:Array = [""]
 export (Array, float) var DURATION:Array = [1]
@@ -16,8 +12,6 @@ onready  var TIMER = $Timer
 onready  var SUBTITLE = $MarginContainer / CenterContainer / Subtitle
 var current_scene = 0
 var t = 0
-
-
 
 func _ready():
 	$MarginContainer / CenterContainer / Subtitle.get_font("font").size = 32 * (Global.resolution[0] / 1280)
@@ -37,8 +31,6 @@ func _ready():
 		Global.cutscene = false
 		Global.border.show()
 		Global.goto_scene("res://Menu/Main_Menu.tscn")
-
-
 
 func _process(delta):
 	if instant:
