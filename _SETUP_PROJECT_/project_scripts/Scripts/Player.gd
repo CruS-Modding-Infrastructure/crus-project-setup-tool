@@ -327,6 +327,9 @@ func set_move_speed():
 	move_speed = clamp(move_speed, 2, 100)
 
 func _physics_process(delta):
+	if GLOBAL.implants.head_implant.slowfall:
+		player_velocity.y = clamp(player_velocity.y, - 3, 100000)
+		
 	if start_flag:
 		UI.time_now = OS.get_system_time_msecs()
 		current_time = OS.get_system_time_msecs()

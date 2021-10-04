@@ -36,6 +36,7 @@ class Implant:
 	var throw_bonus:float = 0
 	var zoom_bonus:float = 1
 	var shrink:bool = false
+	var slowfall:bool = false
 	var healing:float = 0
 	var sensor:bool = false
 	var instadeath:bool = false
@@ -528,6 +529,17 @@ func _ready():
 	
 	IMPLANTS.append(new_implant)
 
+	new_implant = Implant.new()
+	new_implant.i_name = "Flowerchute"
+	new_implant.explanation = "An extraterrestrial flower of unknow origin planted on the user's head. Works as a parachute and augments cognitive skills."
+	new_implant.price = 0
+	new_implant.slowfall = true
+	new_implant.head = true
+	new_implant.hidden = true
+	new_implant.texture = load("res://Textures/Menu/Implants/flowerchute.png")
+	
+	IMPLANTS.append(new_implant)
+	
 	new_implant = Implant.new()
 	new_implant.i_name = "Cortical Scaledown+"
 	new_implant.explanation = "Gives you the psychogenetic ability to shrink your body by influencing its scale value. Installed in the head extension port."
