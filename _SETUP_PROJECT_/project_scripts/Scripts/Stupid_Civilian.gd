@@ -84,7 +84,6 @@ func _ready():
 	if glob.CURRENT_LEVEL != 7 or objective:
 		optimization_multiplier = 1
 	time += rand_range(0, 50)
-	glob.citizen_offset += 1
 
 	anim_player = get_parent().get_node_or_null("Nemesis/AnimationPlayer")
 	mesh = get_parent().get_node_or_null("Nemesis/Armature/Skeleton")
