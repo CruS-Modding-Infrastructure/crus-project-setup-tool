@@ -1,5 +1,7 @@
 extends KinematicBody
 
+
+
 var rotation_helper:Spatial
 var player_ray:RayCast
 var held = false
@@ -35,7 +37,7 @@ var player:Spatial
 var player_last_seen:Vector3
 var player_spotted:bool = false
 var reaction_timer:float = 0
-var navigation:Navigation
+var navigation:RID
 var last_seen_n:Vector3
 var time:float = 0
 var dead:bool = false
@@ -70,10 +72,10 @@ var forward_helper:Position3D
 var pos_flag = false
 var player_distance = Vector3.ZERO
 var shoot_mode:bool = false
-onready  var painsound = $SFX / Pain1
+onready var painsound = $SFX / Pain1
 export  var civ_killer = false
 
-onready  var soul:Spatial = get_parent()
+onready var soul:Spatial = get_parent()
 var following_path:bool = false
 var tranqtimer:Timer
 var stealthed
@@ -118,6 +120,7 @@ func _ready()->void :
 	player = glob.player
 	if player:
 		player_distance = global_transform.origin.distance_to(player.global_transform.origin)
+	
 	navigation = glob.nav
 	player_ray = $Player_Ray
 	player_ray.transform.origin.z = 0
@@ -132,7 +135,7 @@ func _ready()->void :
 	muzzleflash = get_node_or_null("Muzzleflash")
 	
 	if move_speed != 0:
-		path = navigation.get_simple_path(global_transform.origin, global_transform.origin)
+		path = NavigationServer.map_get_path(navigation, global_transform.origin, global_transform.origin, true)
 	
 	has_anim_attack = anim_player.has_animation("Attack")
 	
@@ -151,12 +154,46 @@ func _ready()->void :
 				offset = Vector3(0, 0, - 500)
 		var result = space_state.intersect_ray(global_transform.origin, global_transform.origin + offset)
 		if result:
-			path = navigation.get_simple_path(global_transform.origin, navigation.get_closest_point(result.position))
+			
+			path = NavigationServer.map_get_path(navigation, global_transform.origin, NavigationServer.map_get_closest_point(navigation, result.position), true)
+			
 		find_path(get_physics_process_delta_time())
 	stealthed = glob.implants.torso_implant.stealth and global_transform.origin.distance_to(glob.player.global_transform.origin) > 20
 	yield (get_tree(), "idle_frame")
 	nearby = soul.new_alert_sphere.get_overlapping_bodies()
 	move()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func _physics_process(delta)->void :
 	if player == null:
@@ -177,6 +214,8 @@ func _physics_process(delta)->void :
 		if player_distance > 30:
 			return 
 	
+
+	
 	height_difference = player.global_transform.origin.y > global_transform.origin.y and abs(player.global_transform.origin.y - global_transform.origin.y) > 21
 	anim_counter += 1
 	time += 1
@@ -191,33 +230,28 @@ func _physics_process(delta)->void :
 	
 	
 	if Global.every_55:
+		
 		if randi() % 2 == 1:
 			shoot_mode = true
 		elif not civ_killer:
 			shoot_mode = false
-	
 	if move_speed == 0:
 		if player_spotted and not dead and not tranq:
 			rotate_towards = lerp(rotate_towards, player.global_transform.origin, 6 * delta)
 			look_at(rotate_towards, Vector3.UP)
 			rotation.x = 0
 		shoot_mode = true
-	
 	if not player_spotted and not dead and not tranq and (player_distance < 40 or move_speed != 0):
 		wait_for_player(delta)
-	
 	track_player(delta)
-	
 	if not sight_potential and player_distance > 20 and fmod(time, 20) != 0 and not alerted and not player_spotted:
 		return 
-	
 	if fmod(time, 5) == 0 and sight_potential:
 		heading = - Vector3(player.global_transform.origin.x, 0, player.global_transform.origin.z).direction_to(Vector3(global_transform.origin.x, 0, global_transform.origin.z))
 		
 		line_of_sight = global_transform.origin.direction_to(forward_helper.global_transform.origin).dot(heading)
 		heading_y = (player.global_transform.origin - global_transform.origin).normalized()
 		line_of_sight_y = transform.basis.xform(Vector3.UP).dot(heading_y)
-	
 	if fmod(time, 20) == 0 and player_distance < 30:
 		if velocity_ray.is_colliding():
 			var collider = velocity_ray.get_collider()
@@ -228,10 +262,11 @@ func _physics_process(delta)->void :
 					collider.destroy(normal, point)
 				elif rand_patroller and collider.has_method("destroy") and collider.has_method("use") and ( not alerted and not player_spotted) and not pos_flag:
 					if pos_flag:
-						path = navigation.get_simple_path(global_transform.origin, pos2)
+						
+						path = NavigationServer.map_get_path(navigation, global_transform.origin, pos2, true)
 						pos_flag = not pos_flag
 					else :
-						path = navigation.get_simple_path(global_transform.origin, pos1)
+						path = NavigationServer.map_get_path(navigation, global_transform.origin, pos1, true)
 						pos_flag = not pos_flag
 				elif collider.has_method("use") and not collider.has_method("destroy") and not collider.get_collision_layer_bit(6) and Vector2(velocity.x, velocity.z).length() > 0.2:
 					collider.use()
@@ -239,9 +274,10 @@ func _physics_process(delta)->void :
 					collider.piercing_damage(200, normal, point, global_transform.origin)
 	velocity.y -= gravity * delta
 	if not dead and not tranq:
+
 		if player_spotted:
 			player_spotted()
-		
+
 		if path.size() > 0 and ((player_distance > engage_distance and ( not shoot_mode or melee)) or not in_sight) and player_spotted:
 				find_path(delta)
 		else :
@@ -252,27 +288,34 @@ func _physics_process(delta)->void :
 	elif is_on_floor():
 			velocity.x *= 0.95
 			velocity.z *= 0.95
+
 	move()
+	
+	
+		
+
 
 
 func move()->void :
+	
 	if crusher:
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			if collision.collider != null:
 				if collision.collider.has_method("damage") and Vector3(velocity.x, 0, velocity.y).length() > 2:
 					collision.collider.damage(100, collision.normal, collision.position, global_transform.origin)
-	
+		
+		
+		
+		
 	velocity = move_and_slide(velocity, Vector3.UP, false, 4, 0.785398)
 
 func wait_for_player(delta)->void :
 	if not patrol:
 		if move_speed == 0:
 			anim_player.play("Idle", - 1, 1)
-		
 		if is_on_floor():
 			velocity.y = 0
-		
 		if path.size() == 0:
 			anim_player.play("Idle", - 1, 1)
 			if fmod(time, alertness) == 0:
@@ -280,10 +323,10 @@ func wait_for_player(delta)->void :
 				if rand_patroller and randi() % 5 == 1:
 					
 					if pos_flag:
-						path = navigation.get_simple_path(global_transform.origin, pos2)
+						path = NavigationServer.map_get_path(navigation, global_transform.origin, pos2, true)
 						pos_flag = not pos_flag
 					else :
-						path = navigation.get_simple_path(global_transform.origin, pos1)
+						path = NavigationServer.map_get_path(navigation, global_transform.origin, pos1, true)
 						pos_flag = not pos_flag
 				rand_rot = global_transform.origin + Vector3.FORWARD.rotated(Vector3.UP, rand_range( - PI, PI))
 			rotate_towards = lerp(rotate_towards, rand_rot, (6 * delta - (deg2rad(abs(rotate_towards.angle_to(rand_rot))) * delta)) * 0.1)
@@ -311,8 +354,7 @@ func wait_for_player(delta)->void :
 					offset = Vector3(0, 0, - 500)
 			var result = space_state.intersect_ray(global_transform.origin, global_transform.origin + offset)
 			if result:
-				path = navigation.get_simple_path(global_transform.origin, result.position)
-		
+				path = NavigationServer.map_get_path(navigation, global_transform.origin, result.position, true)
 		if path.size() > 0:
 			find_path(delta)
 
@@ -341,17 +383,14 @@ func track_player(delta)->void :
 	if glob.menu.in_game:
 		if glob.player.crouch_flag:
 			player_offset = Vector3(0, 0.7, 0)
-	if "aim_point" in player: # not vanilla, fix for intro
-		player_ray.look_at(player.aim_point.global_transform.origin, Vector3.UP)
-	#else:
-		
+	player_ray.look_at(player.aim_point.global_transform.origin, Vector3.UP)
 	if player_ray.is_colliding() and not dead and not tranq:
 		var collider = player_ray.get_collider()
 		
 		if collider == player:
 			sight_potential = true
 		if collider == player and line_of_sight > 0 and not height_difference and line_of_sight_y < 0.8 and not stealthed:
-			if not civ_killer and "UI" in glob.player: # not vanilla, fix for intro
+			if not civ_killer:
 				glob.player.UI.set_in_sight(true)
 			if soul.psychosis_inducer:
 				glob.player.set_psychosis(true)
@@ -382,11 +421,12 @@ func player_spotted()->void :
 	
 	glob.action_lerp_value += 1
 	if fmod(time, pathing_frequency) == 0:
-		var new_path = navigation.get_simple_path(global_transform.origin, player.global_transform.origin)
+		var new_path = NavigationServer.map_get_path(navigation, global_transform.origin, player.global_transform.origin, true)
 		if new_path.size() > 0:
 			path = new_path
 	elif fmod(time, pathing_frequency) and path.size() == 0:
-		path = navigation.get_simple_path(global_transform.origin, global_transform.origin + Vector3(rand_range( - 3, 3), 0, rand_range( - 3, 3)))
+		path = NavigationServer.map_get_path(navigation, global_transform.origin, global_transform.origin + Vector3(rand_range( - 3, 3), 0, rand_range( - 3, 3)), true)
+		
 
 func add_velocity(incvelocity:Vector3)->void :
 	velocity -= incvelocity
@@ -405,9 +445,12 @@ func alert(pos:Vector3)->void :
 		return 
 	randomize()
 	var new_pos = pos + Vector3(rand_range( - 3, 3), 0, rand_range( - 3, 3))
-	var new_path = navigation.get_simple_path(global_transform.origin, new_pos)
+	var new_path = NavigationServer.map_get_path(navigation, global_transform.origin, new_pos, true)
+	
+	
 	if new_path.size() > 0:
 		path = new_path
+		
 	else :
 		return 
 	

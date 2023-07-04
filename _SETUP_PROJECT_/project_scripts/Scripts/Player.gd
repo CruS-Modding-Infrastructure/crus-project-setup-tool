@@ -30,32 +30,32 @@ var last_wall_norm = Vector3.ZERO
 var jump_bonus = 0
 var double_jump_flag = 0
 var start_flag = false
-onready  var psychosound = $Soundrotator / Psychosound
+onready var psychosound = $Soundrotator / Psychosound
 var special_vision = true
 var last_height = Vector3.ZERO
 var foot_step_counter = 0
 var top_touching = false
 var crouch_flag = false
 var grav_reverse = false
-onready  var curse_torch = $Curse_Torch
-onready  var body_mesh = $Body_Mesh / AnimationPlayer
+onready var curse_torch = $Curse_Torch
+onready var body_mesh = $Body_Mesh / AnimationPlayer
 export  var interpolated_camera = false
 
 var friction_disabled = false
 
-onready  var audio_player = $AudioStreamPlayer3D
+onready var audio_player = $AudioStreamPlayer3D
 var ambient_color
 var ambient_energy
 var lean = 0
-onready  var UI = $UI
-onready  var reticle = $Reticle
+onready var UI = $UI
+onready var reticle = $Reticle
 var player_view:Camera
 var rotation_helper
 var x_mouse_sensitivity = 0.1
 var y_mouse_sensitivity = 0.1
-onready  var crush_check = $Crush_Check / CollisionShape
-onready  var collision_box = $CollisionShape
-onready  var crush_checker = $Crush_Check
+onready var crush_check = $Crush_Check / CollisionShape
+onready var collision_box = $CollisionShape
+onready var crush_checker = $Crush_Check
 var on_floor = false
 var on_wall = false
 var on_slope = false
@@ -68,7 +68,7 @@ export  var friction = 6
 
 export  var move_speed = 9
 var speed_bonus = 0
-var armor = 0
+var armor:float = 0
 export  var base_move_speed = 9
 export  var run_acceleration = 10
 export  var run_deacceleration = 10
@@ -81,13 +81,13 @@ export  var jump_speed = 8
 export  var regular_jump_speed = 8
 export  var water_speed = 4
 var hold_jump_to_bhop = false
-onready  var terrorsuit = $Terrorsuit
+onready var terrorsuit = $Terrorsuit
 var move_direction = Vector3(0, 0, 0)
 var move_direction_norm = Vector3(0, 0, 0)
 var player_velocity = Vector3(0, 0, 0)
 var player_top_velocity = 0
 
-onready  var aim_point = $Aim_Point
+onready var aim_point = $Aim_Point
 
 var wish_jump = false
 var collision
@@ -245,7 +245,8 @@ func _ready():
 		speed_bonus += 0.25
 	if Global.death:
 		speed_bonus += 0.1
-	armor = clamp(leg_implant.armor + torso_implant.armor + head_implant.armor + arm_implant.armor, 0.5, 1.0)
+	armor = leg_implant.armor * torso_implant.armor * head_implant.armor * arm_implant.armor
+	print("armor", armor)
 	if leg_implant.toxic_shield or torso_implant.toxic_shield or arm_implant.toxic_shield or head_implant.toxic_shield or orb:
 		hazmat = true
 	set_move_speed()
@@ -424,6 +425,9 @@ func _physics_process(delta):
 			tox_damage *= 0.25
 		if GLOBAL.soul_intact or GLOBAL.hope_discarded:
 			tox_damage *= 0.5
+		if armor > 1:
+			tox_damage *= (1 / armor)
+			
 		damage(tox_damage, Vector3.ZERO, global_transform.origin, global_transform.origin)
 		toxic_damage_count += 1
 		if toxic_damage_count == 9:
@@ -1062,7 +1066,9 @@ func damage(damage, collision_n, collision_p, shooter_pos):
 		damage *= 0.25
 	if GLOBAL.soul_intact or GLOBAL.hope_discarded:
 		damage *= 2
+
 	damage = damage * armor
+	
 	$Reticle.set_shooter_pos((global_transform.origin - shooter_pos).rotated(Vector3(0, 1, 0), - rotation.y))
 	player_velocity -= collision_n * damage * 0.2
 	if not helmet_flag and GLOBAL.implants.head_implant.helmet and damage < 50:

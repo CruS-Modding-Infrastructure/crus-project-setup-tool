@@ -15,7 +15,7 @@ var total_assets = 0
 var TOILET_FISH = ["BNBO"]
 var POSSIBLE_FISH = [
 	["SLRP", "FLSH", "CIV ", "BRNY"], 
-	["POOL", "DRMP", "BRNY"], 
+	["POOL", "DRMP", "BRNY", "BLLS"], 
 	["POOL", "GLOM", "SMLL", "BIG ", "NGHT", "HUMN", "BRST"], 
 	["FISH", "ZOOP", "BLRP", "MOON", "NGHT", "CARB", "EEL ", "FLND", "GFLD", "DEAD", "HDRA"], 
 	["PSYK", "GLOM", "NGHT", "HUMN", "DEAD", "BNCY"], 
@@ -31,7 +31,7 @@ var POSSIBLE_FISH = [
 	["ICE ", "ICBE"], 
 	["BLSM", "CHTH", "ENGN", "HEAD", "POND", "HELI"], 
 	["SLRP", "FLSH", "CIV ", "PSYK", "TRNC"], 
-	["HELI", "FUZZ", "SCCS"], 
+	["HELI", "FUZZ", "SCCS", "BLLS"], 
 	["HEAD", "DLTA", "MSTK", "PSYK", "PAIN", "SOUL", "GLOM", "HDRA", "DEAD", "HUMN"], 
 ]
 
@@ -119,6 +119,7 @@ func _enter_tree():
 
 	new_stock = stock.new()
 	new_stock.ticker = "PIHO"
+	new_stock.description = "The greatest fast food chain ever to exist with history spanning centuries and tens of thousands of locations open worldwide. The peeperoni pizza is a delight for the senses."
 	new_stock.s_name = "Pizza House"
 	new_stock.max_price = 510
 	new_stock.price = 123
@@ -161,6 +162,7 @@ func _enter_tree():
 
 	new_stock = stock.new()
 	new_stock.ticker = "PWR "
+	new_stock.description = "Originally became known for heavily arming its fleet to counter pirates, but acquired a monopoly status when it was discovered that you can also sink your competition."
 	new_stock.s_name = "Power Monger Shipping Company"
 	new_stock.max_price = 1500
 	new_stock.price = 205
@@ -201,6 +203,7 @@ func _enter_tree():
 	
 	new_stock = stock.new()
 	new_stock.ticker = "SCRD"
+	new_stock.description = "Not much is known about this security company, the workers seem a bit off and don't seem to be able to talk. Rabid fanbase."
 	new_stock.s_name = "Security Redefined"
 	new_stock.max_price = 320
 	new_stock.price = 153
@@ -224,7 +227,7 @@ func _enter_tree():
 
 	new_stock = stock.new()
 	new_stock.ticker = "CSFT"
-	new_stock.s_name = "Consumer Sotfproducts"
+	new_stock.s_name = "Consumer Softproducts"
 	new_stock.description = "Developer of the smash hit video game Gorbino's Quest."
 	new_stock.max_price = 1200
 	new_stock.price = 413
@@ -1648,6 +1651,22 @@ func _enter_tree():
 	new_stock.max_price = 6500000
 	new_stock.min_price = 4500000
 	new_stock.price = 5000000
+	new_stock.volatility = 1
+	new_stock.trend = 0
+	new_stock.starting_price = new_stock.price
+	new_stock.starting_trend = new_stock.trend
+	stocks.append(new_stock)
+	
+	new_stock = stock.new()
+	new_stock.ticker = "BLLS"
+	new_stock.s_name = "Ballsfish"
+	new_stock.description = "By popular demand, as seen on television."
+	new_stock.asset_type = "fish"
+	new_stock.fish_speed = 0.4
+	new_stock.fish_chance = 0.5
+	new_stock.max_price = 450
+	new_stock.min_price = 40
+	new_stock.price = 200
 	new_stock.volatility = 1
 	new_stock.trend = 0
 	new_stock.starting_price = new_stock.price
